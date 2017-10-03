@@ -1,0 +1,3 @@
+[submodule "NPLRuntime"]
+	path = NPLRuntime
+	url = https://github.com/LiXizhi/NPLRuntime.git
