@@ -6,7 +6,6 @@
 // Date:	2017.10.2
 //-----------------------------------------------------------------------------
 #include "AppLauncher.h"
-
 using namespace ParaEngine;
 
 //-----------------------------------------------------------------------------
@@ -20,5 +19,18 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR lpCmdLine, INT )
 	if(lpCmdLine)
 		sAppCmdLine = lpCmdLine;
 	
+	auto pParaEngine = ParaEngine::GetCOREInterface();
+	if (pParaEngine)
+	{
+		auto pParaEngineApp = pParaEngine->CreateApp();
+		if (pParaEngineApp == 0)
+			return E_FAIL;
+
+		if (pParaEngineApp->StartApp(lpCmdLine) != S_OK)
+			return E_FAIL;
+
+		// Run to end
+		return pParaEngineApp->Run(hInst);
+	}
 	return 0;
 }

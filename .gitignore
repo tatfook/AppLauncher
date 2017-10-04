@@ -1,6 +1,7 @@
 .vscode
 bin
 /NPLRuntime
+/Win32
 
 # Prerequisites
 *.d

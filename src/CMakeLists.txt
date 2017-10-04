@@ -24,29 +24,6 @@ file (GLOB AppLauncher_install_FILES ${PROJECT_SOURCE_DIR}/*.bat)
 SOURCE_GROUP("Installer" FILES ${AppLauncher_install_FILES})
 list(APPEND AppLauncher_SRCS ${AppLauncher_install_FILES})
 
-
-##############################  
-# web files
-file (GLOB AppLauncher_js_FILES ${PROJECT_SOURCE_DIR}/js/*.js)
-SOURCE_GROUP("Java Scripts" FILES ${AppLauncher_js_FILES})
-list(APPEND AppLauncher_SRCS ${AppLauncher_js_FILES})
-
-##############################  
-# web files
-file (GLOB AppLauncher_WEB_FILES RELATIVE ${PROJECT_SOURCE_DIR}
-    haqi*.html
-    )
-list(APPEND AppLauncher_SRCS ${AppLauncher_WEB_FILES})
-
-##############################  
-# web files
-file (GLOB AppLauncher_Haqi_FILES RELATIVE ${PROJECT_SOURCE_DIR}
-    haqifiles/*.html
-	intro*.html
-    )
-SOURCE_GROUP("Haqi Files" FILES ${AppLauncher_Haqi_FILES})    
-list(APPEND AppLauncher_SRCS ${AppLauncher_Haqi_FILES})
-
 ##############################
 # add the binary tree to the search path for include files
 include_directories("${Boost_INCLUDE_DIRS}")
@@ -57,6 +34,10 @@ include_directories("${ParaEngineClient_SOURCE_DIR}/Core")
 IF(WIN32)
 	ADD_DEFINITIONS(-D_WIN32_WINNT=0x0501)
 ENDIF(WIN32)
+ADD_DEFINITIONS(-DNPLRUNTIME_STATICLIB)
+ADD_DEFINITIONS(-DCURL_STATICLIB)
+ADD_DEFINITIONS(-DSQLITE_STATICLIB)
+ADD_DEFINITIONS(-DLUA_STATICLIB)
 
 IF(MSVC)
 	# statically link MSVC to reduce dependancies
@@ -77,6 +58,9 @@ IF(MSVC)
 	SET(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /opt:ref /DEBUG /LARGEADDRESSAWARE")
 ENDIF()
 
+# Link the executable to the libraries. 
+link_directories(${NPLRUNTIME_LINK_DIRECTORIES})
+
 # add the executable
 add_executable(AppLauncher ${AppLauncher_SRCS})
 
@@ -89,14 +73,12 @@ set_target_properties(AppLauncher PROPERTIES WIN32_EXECUTABLE true)
 set_target_properties(AppLauncher PROPERTIES OUTPUT_NAME "AppLauncher")
 set_target_properties(AppLauncher PROPERTIES DEBUG_OUTPUT_NAME "AppLauncher_d")
 
-
-# Link the executable to the libraries. 
-target_link_libraries (AppLauncher Psapi.lib ${Boost_LIBRARIES}) 
+target_link_libraries(AppLauncher ${NPLRUNTIME_LINK_LIBRARIES}) 
 
 # Copy files Link the executable to the libraries. 
 ADD_CUSTOM_COMMAND(
    TARGET AppLauncher
    POST_BUILD
-   COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_BIN_DIR}
-   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:AppLauncher> ${OUTPUT_BIN_DIR}
+   COMMAND ${CMAKE_COMMAND} -E make_directory ${APP_BIN_DIR}
+   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:AppLauncher> ${APP_BIN_DIR}
 )
