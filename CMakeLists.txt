@@ -29,4 +29,9 @@ option(NPLRUNTIME_SUPPORT_FBX "support FBX files (assimp)" OFF)
 option(NPLRUNTIME_PHYSICS "include physics" OFF)
 add_subdirectory (${LAUNCHER_SOURCE_DIR}/NPLRuntime/Client)
 
+# All NPL script package to be embedded to the executable
+add_subdirectory (${LAUNCHER_SOURCE_DIR}/npl_packages/AppLauncher)
+
+# main executable
 add_subdirectory (${LAUNCHER_SOURCE_DIR}/src)
+

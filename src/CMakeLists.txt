@@ -24,6 +24,16 @@ file (GLOB AppLauncher_install_FILES ${PROJECT_SOURCE_DIR}/*.bat)
 SOURCE_GROUP("Installer" FILES ${AppLauncher_install_FILES})
 list(APPEND AppLauncher_SRCS ${AppLauncher_install_FILES})
 
+
+##############################  
+# embedded files
+set(EmbeddedResource_FILES)
+embed_resources_abs(MyResource "${LauncherScript_BINARY_DIR}/AppLauncher.zip")
+list(APPEND EmbeddedResource_FILES ${MyResource})
+list(APPEND AppLauncher_SRCS ${EmbeddedResource_FILES})
+SOURCE_GROUP("ResEmbedded" FILES ${EmbeddedResource_FILES})
+
+
 ##############################
 # add the binary tree to the search path for include files
 include_directories("${Boost_INCLUDE_DIRS}")
@@ -82,3 +92,5 @@ ADD_CUSTOM_COMMAND(
    COMMAND ${CMAKE_COMMAND} -E make_directory ${APP_BIN_DIR}
    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:AppLauncher> ${APP_BIN_DIR}
 )
+
+ADD_DEPENDENCIES(AppLauncher LauncherScript)
