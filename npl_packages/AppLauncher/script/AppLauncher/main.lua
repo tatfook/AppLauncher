@@ -13,7 +13,23 @@ local function DumpUsedFiles()
 	end
 end
 
-DumpUsedFiles();
+-- DumpUsedFiles();
 
-log("1111111111111111111\n")
-ParaGlobal.Exit(0);
+
+local function ShowLauncher()
+	NPL.load("(gl)script/ide/System/Windows/Window.lua");
+	local Window = commonlib.gettable("System.Windows.Window")
+	local window = Window:new();
+	window:Show({
+		url="script/AppLauncher/MainWindow.html", 
+		alignment="_fi", left = 0, top = 0, width = 0, height = 0,
+	});
+end
+
+local main_state = nil;
+NPL.this(function()
+	if(not main_state) then
+		main_state = "inited";
+		ShowLauncher();
+	end
+end);

@@ -24,7 +24,6 @@ file (GLOB_RECURSE LauncherScript_HTML_FILES ${PROJECT_SOURCE_DIR}/*.html)
 SOURCE_GROUP("mcml\\" FILES ${LauncherScript_HTML_FILES})
 list(APPEND LauncherScript_SRCS ${LauncherScript_HTML_FILES})
 
-
 ##############################
 # misc
 # SET(LauncherScript_MISC_FILES
