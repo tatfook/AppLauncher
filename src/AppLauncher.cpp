@@ -20,7 +20,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR lpCmdLine, INT )
 	std::string sAppCmdLine;
 	if(lpCmdLine)
 		sAppCmdLine = lpCmdLine;
-	ADD_RESOURCE(":AppLauncherPackage", AppLauncher_zip);
+	
 
 	auto pParaEngine = ParaEngine::GetCOREInterface();
 	if (pParaEngine)
@@ -29,12 +29,15 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR lpCmdLine, INT )
 
 		if (pParaEngineApp == 0)
 			return E_FAIL;
+		std::string sCmd = lpCmdLine;
+		sCmd.append(" bootstrapper=\"script/AppLauncher/main.lua\"");
 
-		// TODO: load archive from ":AppLauncherPackage"
-		// pParaEngineApp->LoadNPLPackage();
-
-		if (pParaEngineApp->StartApp(lpCmdLine) != S_OK)
+		if (pParaEngineApp->StartApp(sCmd.c_str()) != S_OK)
 			return E_FAIL;
+
+		// load archive from embedded resource 
+		ADD_RESOURCE("npl_packages/LauncherScript.zip", AppLauncher_zip);
+		pParaEngineApp->LoadNPLPackage("npl_packages/LauncherScript/");
 
 		// Run to end
 		return pParaEngineApp->Run(hInst);

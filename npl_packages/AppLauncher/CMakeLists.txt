@@ -36,7 +36,7 @@ list(APPEND LauncherScript_SRCS ${LauncherScript_HTML_FILES})
 ##############################
 
 add_custom_target(LauncherScript
-	COMMAND ${CMAKE_COMMAND} -E tar "cfv" "${PROJECT_BINARY_DIR}/AppLauncher.zip" ${LauncherScript_SRCS}
+	COMMAND ${CMAKE_COMMAND} -E tar "cfv" "${PROJECT_BINARY_DIR}/AppLauncher.zip" --format=zip ${PROJECT_SOURCE_DIR}/script
 	WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
 	COMMENT "making npl_package zip archive"
 	SOURCES ${LauncherScript_SRCS})
