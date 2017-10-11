@@ -16,6 +16,8 @@ SET(AppLauncher_SRCS
 	res/app.ico
 	resource.h
 	AppLauncher.cpp		AppLauncher.h
+	../README.md
+	../build_win32.bat
 )
 
 ##############################  
