@@ -22,6 +22,8 @@ Finally clone and build with following command.
 git clone --recursive https://github.com/tatfook/AppLauncher.git
 cd AppLauncher
 build_win32.bat
+
+
 ```
 
 ## Internals
