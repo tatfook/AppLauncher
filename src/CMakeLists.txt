@@ -95,4 +95,4 @@ ADD_CUSTOM_COMMAND(
    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:AppLauncher> ${APP_BIN_DIR}
 )
 
-ADD_DEPENDENCIES(AppLauncher LauncherScript)
+ADD_DEPENDENCIES(AppLauncher LauncherScript AutoUpdater)
