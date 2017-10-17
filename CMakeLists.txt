@@ -21,6 +21,7 @@ set(Boost_USE_STATIC_RUNTIME ON)
 find_package( Boost 1.61 REQUIRED COMPONENTS thread date_time filesystem system chrono signals regex serialization iostreams) 
 
 # main NPL runtime and override default options to generate only static libs and skip some unused library
+option(PARAENGINE_CLIENT_DLL "Generate Dll Or Exe" ON)
 option(NPLRUNTIME_STATIC_LIB "static lib or not" ON)
 option(NPLRUNTIME_LUAJIT21 "build luajit21 support GC64" OFF)
 option(NPLRUNTIME_LUAJIT20   "build luajit2.0.4" OFF)
