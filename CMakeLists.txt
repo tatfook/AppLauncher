@@ -32,6 +32,7 @@ add_subdirectory (${LAUNCHER_SOURCE_DIR}/NPLRuntime/Client)
 
 # All NPL script package to be embedded to the executable
 add_subdirectory (${LAUNCHER_SOURCE_DIR}/npl_packages/AppLauncher)
+add_subdirectory (${LAUNCHER_SOURCE_DIR}/npl_packages/AutoUpdater)
 
 # main executable
 add_subdirectory (${LAUNCHER_SOURCE_DIR}/src)
