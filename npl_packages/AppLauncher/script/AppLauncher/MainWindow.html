@@ -1,6 +1,20 @@
 <pe:mcml>
+    <script type="text/npl" src="MainWindow.lua">
+<![CDATA[
+NPL.load("script/AppLauncher/MainWindow.lua");
+local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
+MainWindow.OnInit();
+function DoUpdate()
+    MainWindow.DoUpdate();
+end
+]]></script>
     <div style="margin-left:100px;margin-top:100px">
-        hello world
-        <input type="button" name="dump" value="dump loaded files"/>
+        <div>
+            state:<input type="button" name="state_txt" value="none" />
+        </div>
+        <div>
+            percent:<input type="button"  name="percent_txt" value ="0" style="width:200px;"/>
+        </div>
+        <input type="button" name="update_btn" value="update" tooltip="aaaaaa" onclick="DoUpdate()"/>
     </div>
 </pe:mcml>

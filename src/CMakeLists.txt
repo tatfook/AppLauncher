@@ -30,7 +30,7 @@ list(APPEND AppLauncher_SRCS ${AppLauncher_install_FILES})
 ##############################  
 # embedded files
 set(EmbeddedResource_FILES)
-embed_resources_abs(MyResource "${LauncherScript_BINARY_DIR}/AppLauncher.zip")
+embed_resources_abs(MyResource "${LauncherScript_BINARY_DIR}/AppLauncher.zip" "${LauncherScript_BINARY_DIR}/AppLauncherTexture.zip" "${AutoUpdater_BINARY_DIR}/AutoUpdater.zip")
 list(APPEND EmbeddedResource_FILES ${MyResource})
 list(APPEND AppLauncher_SRCS ${EmbeddedResource_FILES})
 SOURCE_GROUP("ResEmbedded" FILES ${EmbeddedResource_FILES})
