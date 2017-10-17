@@ -17,13 +17,9 @@ end
 
 
 local function ShowLauncher()
-	NPL.load("(gl)script/ide/System/Windows/Window.lua");
-	local Window = commonlib.gettable("System.Windows.Window")
-	local window = Window:new();
-	window:Show({
-		url="script/AppLauncher/MainWindow.html", 
-		alignment="_fi", left = 0, top = 0, width = 0, height = 0,
-	});
+	NPL.load("script/AppLauncher/MainWindow.lua");
+    local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
+    MainWindow.ShowPage();
 end
 
 local main_state = nil;
