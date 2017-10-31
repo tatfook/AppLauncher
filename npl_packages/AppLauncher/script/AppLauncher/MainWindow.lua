@@ -22,7 +22,7 @@ function MainWindow.ShowPage()
 		url="script/AppLauncher/MainWindow.html", 
 		alignment="_fi", left = 0, top = 0, width = 0, height = 0,
 	});
-    MainWindow.DoUpdate();
+    --MainWindow.DoUpdate();
 end
 function MainWindow.ShowState(s)
     if(MainWindow.page)then
