@@ -43,7 +43,9 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR lpCmdLine, INT )
 		pParaEngineApp->LoadNPLPackage("npl_packages/Mod_AutoUpdater/");
 
 		// Run to end
-		return pParaEngineApp->Run(hInst);
+		auto result = pParaEngineApp->Run(hInst);
+		pParaEngine->Destroy();
+		return result;
 	}
 	return 0;
 }
