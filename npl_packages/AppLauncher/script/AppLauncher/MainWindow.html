@@ -7,6 +7,21 @@ MainWindow.OnInit();
 function DoUpdate()
     MainWindow.DoUpdate();
 end
+local menus = {
+    { label = "aaaaaaaaaaaaaaaa", },    
+    { label = "aaaaaaaaaaaaaaaa", },    
+    { label = "aaaaaaaaaaaaaaaa", },    
+    { label = "aaaaaaaaaaaaaaaa", },    
+    { label = "aaaaaaaaaaaaaaaa", },    
+}
+function GetDataSource(index)
+    
+	if(index == nil) then
+		return #(menus);
+	else
+		return menus[index];
+	end
+end
 ]]></script>
     <div width="100%" height="100%" style="background:url(Texture/AppLauncherRes/bg_32bits.png#0 0 1110 660:4 4 4 4)">
         <div style="padding:15px;">
@@ -18,7 +33,25 @@ end
         </div>
         <div width="100%" style="height:1px;background-color:#ffffff"/>
         <div >
-            <div width="15%" style="float:left;min-width:200px;color:#ffffff">
+            <div width="15%" style="float:left;min-width:200px;">
+                <div >
+                    <pe:gridview DataSource="<%=GetDataSource %>" name="menuList" 
+                        CellPadding="0" ItemsPerLine="1" AllowPaging="false" pagesize="10"
+                        style="width:332px;height:600px;" >
+                        <Columns>
+                            <div><%=Eval("label")%></div>        
+                        </Columns>
+                        <EmptyDataTemplate>
+                        <div style="text-align:center;"></div>
+                        </EmptyDataTemplate>
+                        <FetchingDataTemplate>
+                        <div style="text-align:center;"></div>
+                        </FetchingDataTemplate>
+	                    <PagerSettings Position="Bottom" height="0" style="margin-left:90px;margin-top:-30px;width:168px;height:64px;" PreviousPageText="previous page" NextPageText="next page"/>
+	                    <PagerTemplate>
+	                    </PagerTemplate>
+                    </pe:gridview>
+                </div>
                 <div width="100%" style="padding-left:10px;padding-top:7px;min-width:200px;width:200px;height:50px;background:url(Texture/AppLauncherRes/menu_selected_32bits.png:6 6 6 6)">
                     <div style="float:left;width:36px;height:36px;background:url(Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36)"/>
                     <div style="float:left;margin-left:5px;margin-top:10px;" >Paracraft创意空间</div>
