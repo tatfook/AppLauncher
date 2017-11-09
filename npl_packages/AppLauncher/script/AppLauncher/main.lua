@@ -17,9 +17,10 @@ end
 
 
 local function ShowLauncher()
-	NPL.load("script/AppLauncher/MainWindow.lua");
-    local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
-    MainWindow.ShowPage();
+	NPL.load("script/AppLauncher/PageLoader.lua");
+    local PageLoader = commonlib.gettable("AppLauncher.PageLoader");
+    PageLoader.Download();
+    --PageLoader.ShowLocalPage();
 end
 
 local main_state = nil;

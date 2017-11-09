@@ -13,14 +13,30 @@ MainWindow.ShowPage();
 NPL.load("(gl)script/ide/System/Windows/Window.lua");
 local Window = commonlib.gettable("System.Windows.Window")
 local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
+MainWindow.selected_index = 1;
+MainWindow.settings = {
+    { id = "paracraft",     label = "Paracraft创意空间",    config_path = "npl_mod/AutoUpdater/configs/paracraft.xml",      icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36", },
+    { id = "haqi",          label = "魔法哈奇",             config_path = "npl_mod/AutoUpdater/configs/paracraft.xml",      icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36", },
+    { id = "haqi2",         label = "魔法哈奇2",            config_path = "npl_mod/AutoUpdater/configs/paracraft.xml",      icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36", },
+}
 function MainWindow.OnInit()
     MainWindow.page = document:GetPageCtrl();
 end
-function MainWindow.ShowPage()
+function MainWindow.OnClick(index)
+    MainWindow.selected_index = index;
+    MainWindow.RefreshPage();
+end
+function MainWindow.RefreshPage()
+    if(MainWindow.page)then
+        MainWindow.page:Refresh();
+    end
+end
+function MainWindow.ShowPage(url)
 	local window = Window:new();
+    url = url or "script/AppLauncher/MainWindow.html";
 	window:Show({
-		url="script/AppLauncher/MainWindow.html", 
-		alignment="_fi", left = 0, top = 0, width = 0, height = 0,
+		url = url, 
+		alignment = "_fi", left = 0, top = 0, width = 0, height = 0,
 	});
     --MainWindow.DoUpdate();
 end
