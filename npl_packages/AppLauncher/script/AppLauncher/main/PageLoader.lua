@@ -1,11 +1,11 @@
 --[[
-Title: 
-Author(s): PageLoader.lua
+Title: PageLoader.lua
+Author(s): leio
 Date: 2017/11/9
 Desc: 
 use the lib:
 ------------------------------------------------------------
-NPL.load("script/AppLauncher/PageLoader.lua");
+NPL.load("script/AppLauncher/main/PageLoader.lua");
 local PageLoader = commonlib.gettable("AppLauncher.PageLoader");
 PageLoader.Download();
 ------------------------------------------------------------
@@ -23,9 +23,9 @@ PageLoader.pages = {
     {url  = "http://git.keepwork.com/gitlab_rls_zhanglei/keepworkhelloworld/raw/master/zhanglei/helloworld/MainWindowLua.md", name = PageLoader.lua_name, },
 }
 function PageLoader.ShowLocalPage()
-    NPL.load("script/AppLauncher/MainWindow.lua");
+    NPL.load("script/AppLauncher/main/MainWindow.lua");
     local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
-    MainWindow.ShowPage("script/AppLauncher/MainWindow.html");
+    MainWindow.ShowPage("script/AppLauncher/main/MainWindow.html");
 end
 function PageLoader.Download()
     PageLoader.DownloadNext(function(status)

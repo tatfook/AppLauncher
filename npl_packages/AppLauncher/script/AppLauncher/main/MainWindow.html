@@ -1,35 +1,39 @@
 <pe:mcml>
     <script type="text/npl" src="MainWindow.lua">
 <![CDATA[
-NPL.load("script/AppLauncher/MainWindow.lua");
+NPL.load("script/AppLauncher/main/MainWindow.lua");
 local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
 MainWindow.OnInit();
 function DoUpdate()
     MainWindow.DoUpdate();
 end
-local menus = {
-    { label = "aaaaaaaaaaaaaaaa", },    
-    { label = "aaaaaaaaaaaaaaaa", },    
-    { label = "aaaaaaaaaaaaaaaa", },    
-    { label = "aaaaaaaaaaaaaaaa", },    
-    { label = "aaaaaaaaaaaaaaaa", },    
-}
 function GetDataSource(index)
 	if(index == nil) then
-		return #(MainWindow.settings);
+		return #(MainWindow.menus);
 	else
-		return MainWindow.settings[index];
+		return MainWindow.menus[index];
 	end
 end
 function IsSelected(index)
     return MainWindow.selected_index == index;
 end
 function OnSelected(index)
-    echo("============aaaaaaaaaaaaa");
-    echo(index);
+    MainWindow.OnClick(index);
 end
 function GetSelectedIndex()
-    return MainWindow.selected_index;
+    return MainWindow.GetSelectedIndex();
+end
+function OnLogin()
+    echo("============OnLogin");
+end
+function OnRegister()
+    echo("============OnRegister");
+end
+function OnUpdate()
+    MainWindow.OnUpdate();
+end
+function OnRun()
+    MainWindow.OnRun();
 end
 ]]></script>
 <!--<div>
@@ -43,64 +47,51 @@ end
     <div style="padding:15px;">
         <div style="width:128px;height:15px;margin-top:10px;background:url(Texture/AppLauncherRes/keepwork_logo_32bits.png#0 0 128 15)"></div>
         <div align="right" style="margin-top:-15px;">
-            <input type="button" value="登录" style="float:left;width:80px;height:35px;color:#ffffff;font:bold;background:url(Texture/AppLauncherRes/btn_blue_32bits.png#0 0 19 16:6 6 6 6)"/>
-            <input type="button" value="注册" style="float:left;margin-left:20px;width:80px;height:35px;color:#ffffff;font:bold;background:url(Texture/AppLauncherRes/btn_black_32bits.png#0 0 14 15:6 6 6 6)"/>
+            <input type="button" value="登录" onclick="OnLogin()" style="float:left;width:80px;height:35px;color:#ffffff;font:bold;background:url(Texture/AppLauncherRes/btn_blue_32bits.png#0 0 19 16:6 6 6 6)"/>
+            <input type="button" value="注册" onclick="OnRegister()" style="float:left;margin-left:20px;width:80px;height:35px;color:#ffffff;font:bold;background:url(Texture/AppLauncherRes/btn_black_32bits.png#0 0 14 15:6 6 6 6)"/>
         </div>
     </div>
+    <!--horizontal line-->
     <div width="100%" style="height:1px;background-color:#ffffff"/>
     <div >
-        <div width="15%" style="float:left;min-width:200px;">
+        <div style="float:left;width:200px;" height="100%">
             <div >
                 <pe:gridview DataSource="<%=GetDataSource %>" name="menuList" 
-                    CellPadding="0" ItemsPerLine="1" AllowPaging="false" pagesize="10"
-                    style="width:332px;height:600px;" >
+                    CellPadding="0" ItemsPerLine="1" AllowPaging="false" pagesize="100">
                     <Columns>
                         <div>
                             <pe:if condition='<%=IsSelected(Eval("index"))%>' >
-                                <div width="100%" style="padding-left:10px;padding-top:7px;min-width:200px;height:50px;background:url(Texture/AppLauncherRes/menu_selected_32bits.png:6 6 6 6)">
-                                    <div style="float:left;width:36px;height:36px;background:url(Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36)"/>
+                                <div width="100%" style="padding-left:10px;padding-top:7px;width:200px;height:50px;background:url(Texture/AppLauncherRes/menu_selected_32bits.png:6 6 6 6)">
+                                    <img width="36" height="36" src='<%=Eval("icon")%>'/>
                                     <div style="float:left;margin-left:5px;margin-top:10px;color:#ffffff;" ><%=Eval("label")%></div>
                                 </div>    
                             </pe:if>
                             <pe:if condition='<%=not IsSelected(Eval("index"))%>' >
-                                <div width="100%" style="padding-left:10px;padding-top:7px;min-width:200px;height:50px;">
-                                    <div style="float:left;width:36px;height:36px;background:url(Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36)"/>
-                                    <div style="float:left;margin-left:5px;margin-top:10px;color:#ffffff;" name='<%=Eval("index")%>' onclick='OnSelected()' ><%=Eval("label")%></div>
+                                <div width="100%" name='<%=Eval("index")%>' onclick='OnSelected()'  style="padding-left:10px;padding-top:7px;width:200px;height:50px;">
+                                    <img width="36" height="36" src='<%=Eval("icon")%>'/>
+                                    <div style="float:left;margin-left:5px;margin-top:10px;color:#ffffff;" ><%=Eval("label")%></div>
                                 </div>
                             </pe:if>
                         </div>
                     </Columns>
                 </pe:gridview>
             </div>
-            <div width="100%" style="padding-left:10px;padding-top:7px;min-width:200px;height:50px;background:url(Texture/AppLauncherRes/menu_selected_32bits.png:6 6 6 6)">
-                <div style="float:left;width:36px;height:36px;background:url(Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36)"/>
-                <div style="float:left;margin-left:5px;margin-top:10px;" >Paracraft创意空间</div>
-            </div>
-            <div width="100%" style="padding-left:10px;padding-top:7px;min-width:200px;height:50px;">
-                <div style="float:left;width:36px;height:36px;background:url(Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36)"/>
-                <div style="float:left;margin-left:5px;margin-top:10px;" >魔法哈奇</div>
-            </div>
-            <div width="100%" style="padding-left:10px;padding-top:7px;min-width:200px;height:50px;">
-                <div style="float:left;width:36px;height:36px;background:url(Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36)"/>
-                <div style="float:left;margin-left:5px;margin-top:10px;" >魔法哈奇2</div>
-            </div>
         </div>
-        <div height="100%" style="float:left;">
+        <!--vertical line-->
+        <div style="float:left;">
             <div height="100%" style="width:1px;background-color:#ffffff"/>
         </div>
         <div width="100%" style="float:left;padding-left:10px;padding-top:10px;">
-            <div style="width:180px;height:86px;background:url(Texture/AppLauncherRes/paracraft_title_32bits.png#0 0 180 86)"/>
-            <div height="90%">
-                <div style="float:left;padding:1px;background-color:#ffffff">
-                    <!--left data-->
-                    <pe:if condition='<%=GetSelectedIndex() == 1%>'>
-                        <div style="width:524px;height:279px;background:url(Texture/AppLauncherRes/paracraft_1_32bits.png#0 0 524 279)"/>
-                    </pe:if>
-                </div>
-                <div width="100%" style="float:left;margin-left:5px;padding:1px;">
-                    <div align="center" style="min-width:220px;min-height:279px;">
-                        <!--right data-->
-                        <pe:if condition='<%=GetSelectedIndex() == 1%>'>
+            <pe:if condition='<%=GetSelectedIndex() == 1%>'>
+                <div style="width:180px;height:86px;background:url(Texture/AppLauncherRes/paracraft_title_32bits.png#0 0 180 86)"/>
+                <div height="90%">
+                    <div style="float:left;padding:1px;background-color:#ffffff">
+                        <!--left data-->
+                            <div style="width:524px;height:279px;background:url(Texture/AppLauncherRes/paracraft_1_32bits.png#0 0 524 279)"/>
+                    </div>
+                    <div width="100%" style="float:left;margin-left:5px;padding:1px;">
+                        <div align="center" style="min-width:220px;min-height:279px;">
+                            <!--right data-->
                             <div style="height:260px;">
                                 <div style="margin-top:15px;">
                                     <div style="float:left;width:4px;height:25px;background:url(Texture/AppLauncherRes/blue_line_32bits.png#0 0 3 16:1 1 1 1)"/>
@@ -128,25 +119,33 @@ end
                                 <div style="float:left;">查看更多</div>
                                 <div style="float:left;margin-left:2px;margin-top:2px;width:16px;height:16px;background:url(Texture/AppLauncherRes/arrow_right_32bits.png)"/>
                             </div>
-                        </pe:if>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </pe:if>
+            <pe:if condition='<%=GetSelectedIndex() ~= 1%>'>
+                <div style="width:180px;height:86px;"/>
+                <div height="90%">
+                    <div style="color:#ffffff">
+                        <%=GetSelectedIndex()%>
+                    </div>
+                </div>
+            </pe:if>
             <div style="margin-top:-10px;">
                 <div>
-                    <input type="button" value="进入" style="float:left;width:180px;height:46px;color:#ffffff;font:bold;background:url(Texture/AppLauncherRes/btn_blue_32bits.png#0 0 19 16:6 6 6 6)"/>
+                    <input type="button" value="进入" onclick="OnRun()" style="float:left;width:180px;height:46px;color:#ffffff;font:bold;background:url(Texture/AppLauncherRes/btn_blue_32bits.png#0 0 19 16:6 6 6 6)"/>
                     <div style="float:left;padding-right:10px;">
                         <div align="right" >
                             <div style="float:left;color:#ffffff">
-                                当前版本：0.7.309    最新版本：0.7.314
+                                <input type="button" name="state_txt" style="width:400px;height:25px;text-align:left;"/>
                             </div>
-                            <div style="float:left;margin-left:20px;color:#66b8ff">
+                            <div style="float:left;margin-left:20px;margin-top:5px;color:#66b8ff;" onclick="OnUpdate()">
                                 点击更新
                             </div>
                         </div>
                         <div align="right" style="padding:1px;background-color:#747170">
                             <div style="width:600px;height:16px;background-color:#000000">
-                                <div style="width:260px;height:16px;background:url(Texture/AppLauncherRes/progressbar_32bits.png:6 6 6 6)"/>
+                                <pe:progressbar name="progress_bar" style="height:16px;" Minimum = "0" Maximum = "100" Value="75" blockimage="Texture/AppLauncherRes/progressbar_32bits.png:6 6 6 6" background="" />
                             </div>
                         </div>
                             <div align="right" style="color:#7d7d7d;font-size:12px;">

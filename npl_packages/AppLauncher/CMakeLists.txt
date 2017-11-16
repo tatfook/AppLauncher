@@ -10,19 +10,15 @@ project (LauncherScript)
 # since the project is for documentation only, we will turn relative path on. 
 # set(CMAKE_USE_RELATIVE_PATHS ON)
 
-##############################
-file (GLOB_RECURSE LauncherScript_NPL_FILES ${PROJECT_SOURCE_DIR}/*.lua)
-SOURCE_GROUP("npl\\" FILES ${LauncherScript_NPL_FILES})
-list(APPEND LauncherScript_SRCS ${LauncherScript_NPL_FILES})
+# script/AppLauncher/main
+file (GLOB_RECURSE LauncherScript_AppLauncher_main_FILES ${PROJECT_SOURCE_DIR}/script/AppLauncher/main/*.*)
+SOURCE_GROUP("script\\AppLauncher\\main" FILES ${LauncherScript_AppLauncher_main_FILES})
+list(APPEND LauncherScript_SRCS ${LauncherScript_AppLauncher_main_FILES})
 
-##############################
-file (GLOB_RECURSE LauncherScript_XML_FILES ${PROJECT_SOURCE_DIR}/*.xml)
-SOURCE_GROUP("mcml\\" FILES ${LauncherScript_XML_FILES})
-list(APPEND LauncherScript_SRCS ${LauncherScript_XML_FILES})
-
-file (GLOB_RECURSE LauncherScript_HTML_FILES ${PROJECT_SOURCE_DIR}/*.html)
-SOURCE_GROUP("mcml\\" FILES ${LauncherScript_HTML_FILES})
-list(APPEND LauncherScript_SRCS ${LauncherScript_HTML_FILES})
+# script/AppLauncher/lang
+file (GLOB_RECURSE LauncherScript_AppLauncher_lang_FILES ${PROJECT_SOURCE_DIR}/script/AppLauncher/lang/*.*)
+SOURCE_GROUP("script\\AppLauncher\\lang" FILES ${LauncherScript_AppLauncher_lang_FILES})
+list(APPEND LauncherScript_SRCS ${LauncherScript_AppLauncher_lang_FILES})
 
 # textures
 file (GLOB_RECURSE LauncherScript_TEXTURE_FILES ${PROJECT_SOURCE_DIR}/res/Texture/Aries/Creator/Theme/*.png)
