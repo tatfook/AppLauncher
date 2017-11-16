@@ -29,7 +29,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR lpCmdLine, INT )
 		if (pParaEngineApp == 0)
 			return E_FAIL;
 		std::string sCmd = lpCmdLine;
-		sCmd.append(" bootstrapper=\"script/AppLauncher/main.lua\"");
+		sCmd.append(" bootstrapper=\"script/AppLauncher/main/main.lua\"");
 
 		if (pParaEngineApp->StartApp(sCmd.c_str()) != S_OK)
 			return E_FAIL;
