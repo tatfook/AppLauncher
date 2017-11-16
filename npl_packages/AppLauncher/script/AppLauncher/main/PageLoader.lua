@@ -12,15 +12,15 @@ PageLoader.Download();
 ]]
 local PageLoader = commonlib.gettable("AppLauncher.PageLoader");
 PageLoader.index = 0;
-PageLoader.html_name = "MainWindow.html";
-PageLoader.lua_name = "MainWindow.lua";
+PageLoader.html_name = "script/AppLauncher/main/MainWindow.html";
+PageLoader.lua_name = "script/AppLauncher/main/MainWindow.lua";
 PageLoader.status = {
     finished = 1,
     error = 2,
 }
 PageLoader.pages = {
-    {url  = "http://git.keepwork.com/gitlab_rls_zhanglei/keepworkhelloworld/raw/master/zhanglei/helloworld/MainWindowHtml.md", name = PageLoader.html_name, },
-    {url  = "http://git.keepwork.com/gitlab_rls_zhanglei/keepworkhelloworld/raw/master/zhanglei/helloworld/MainWindowLua.md", name = PageLoader.lua_name, },
+    {url  = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/main/MainWindow.html", name = PageLoader.html_name, },
+    {url  = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/main/MainWindow.lua", name = PageLoader.lua_name, },
 }
 function PageLoader.ShowLocalPage()
     NPL.load("script/AppLauncher/main/MainWindow.lua");
@@ -55,6 +55,7 @@ function PageLoader.DownloadNext(callback)
 	        LOG.std(nil, "debug", "PageLoader", "Download status:%d", err);
             if(err == 200)then
                 if(data)then
+	                ParaIO.CreateDirectory(name);
                     local file = ParaIO.open(name,"w");
                     if(file:IsValid()) then
 					    file:write(data,#data);

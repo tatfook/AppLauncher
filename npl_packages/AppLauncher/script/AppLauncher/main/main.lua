@@ -20,8 +20,8 @@ local function ShowLauncher()
     NPL.load("(gl)script/AppLauncher/lang/lang.lua");
 	NPL.load("script/AppLauncher/main/PageLoader.lua");
     local PageLoader = commonlib.gettable("AppLauncher.PageLoader");
-    --PageLoader.Download();
-    PageLoader.ShowLocalPage();
+    PageLoader.Download();
+    --PageLoader.ShowLocalPage();
 end
 
 local main_state = nil;
