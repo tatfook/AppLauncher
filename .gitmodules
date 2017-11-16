@@ -5,3 +5,7 @@
 	path = npl_packages/AutoUpdater
 	url = https://github.com/NPLPackages/AutoUpdater.git
 	branch = master
+[submodule "npl_packages/main"]
+	path = npl_packages/main
+	url = https://github.com/NPLPackages/main.git
+	branch = dev
