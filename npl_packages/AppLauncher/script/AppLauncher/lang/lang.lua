@@ -7,8 +7,6 @@ NPL.load("(gl)script/AppLauncher/lang/lang.lua");
 ]]
 -- One can set a different language other than the default one in the application command line.
 local lang = ParaEngine.GetAppCommandLineByParam("lang", nil);
-echo("=======lang");
-echo(lang);
 if(lang~=nil) then
 	if(lang=="enUS" or lang=="zhCN") then
 		ParaEngine.SetLocale(lang);
