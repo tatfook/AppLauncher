@@ -12,7 +12,7 @@ PageLoader.CheckVersion()
 ]]
 local PageLoader = commonlib.gettable("AppLauncher.PageLoader");
 local version_url = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/versions/LauncherVersion.lua";
-local assets_url = "";
+local assets_url = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/versions/LauncherAssets.lua";
 local version_latest_filepath = "temp/LauncherVersion.lua";
 local assets_latest_filepath = "temp/LauncherAssets.lua";
 local version_old_filepath = "versions/LauncherVersion.lua";
@@ -112,8 +112,8 @@ function PageLoader.GetDownloadFolder_Old()
     local s = string.format("%s_%s",version_file_prefix,PageLoader.old_version);
     return s;
 end
--- @param is_check:check if add search path
--- @param is_latest:if ture add search path with the latest folder,otherwise old
+-- @param is_check:if true enable search path
+-- @param is_latest:if ture add search path with the latest folder,otherwise use old path
 function PageLoader.ShowAppPage(is_check,is_latest)
     if(is_check)then
         if(is_latest)then
