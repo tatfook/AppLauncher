@@ -11,9 +11,11 @@ PageLoader.CheckVersion()
 ------------------------------------------------------------
 ]]
 local PageLoader = commonlib.gettable("AppLauncher.PageLoader");
-local version_url = "";
+local version_url = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/versions/LauncherVersion.lua";
+local assets_url = "";
 local version_latest_filepath = "temp/LauncherVersion.lua";
-local version_filepath = "versions/LauncherVersion.lua";
+local assets_latest_filepath = "temp/LauncherAssets.lua";
+local version_old_filepath = "versions/LauncherVersion.lua";
 local version_file_prefix = "versions/launcher";
 PageLoader.index = 0;
 PageLoader.status = {
@@ -21,37 +23,69 @@ PageLoader.status = {
     error = 2,
 }
 PageLoader.download_assets = nil;
-PageLoader.old_version = 0;
+PageLoader.old_version = -1;
 PageLoader.latest_version = 0;
-function PageLoader.CheckVersion()
-    --load local version
-    local Old_LauncherVersion = NPL.load("version/LauncherVersion.lua");
-    local old_version = Old_LauncherVersion.version or 0;
-    PageLoader.old_version = old_version;
-    --load remote version
-    System.os.GetUrl(version_url, function(err, msg, data)  
+function PageLoader.LoadFileModule(path)
+    if(not path)then return {} end
+    local full_path = ParaIO.GetCurDirectory(0) .. path;
+    if(ParaIO.DoesFileExist(full_path))then
+        local mod = NPL.load(path);
+        return mod;
+    end
+    return {};
+end
+function PageLoader.DownloadFileModle(url,filepath,callback)
+    if(not url or not filepath)then
+        callback(PageLoader.status.error);
+        return
+    end
+    System.os.GetUrl(url, function(err, msg, data)  
         if(err == 200)then
             if(data)then
-                ParaIO.CreateDirectory(version_latest_filepath);
-                local file = ParaIO.open(version_latest_filepath,"w");
+                ParaIO.CreateDirectory(filepath);
+                local file = ParaIO.open(filepath,"w");
                 if(file:IsValid()) then
 					file:write(data,#data);
 					file:close();
-
-                    local Latest_LauncherVersion = NPL.load(version_latest_filepath);
-                    local latest_version = Latest_LauncherVersion.version or 0;
-                    --set temp latest_version to download assets
-                    PageLoader.latest_version = latest_version;
-                    if(latest_version > old_version)then
-                        --download latest assets
-                        if(Latest_LauncherVersion.latest_assets)then
+                    callback(PageLoader.status.finished);
+                end
+            else
+                callback(PageLoader.status.error);
+            end
+        else
+            callback(PageLoader.status.error);
+        end
+    end);
+end
+function PageLoader.CheckVersion()
+    --load local version
+    local Old_LauncherVersion = PageLoader.LoadFileModule(version_old_filepath);
+    if(Old_LauncherVersion.version)then
+        PageLoader.old_version = Old_LauncherVersion.version;
+    end
+    --load remote version
+    PageLoader.DownloadFileModle(version_url,version_latest_filepath,function(s)
+        if(s == PageLoader.status.error)then
+            PageLoader.ShowAppPage(true,false);
+        elseif(PageLoader.status.finished)then
+            local version_module = PageLoader.LoadFileModule(version_latest_filepath);
+            PageLoader.latest_version = version_module.version or 0;
+	        LOG.std(nil, "debug", "CheckVersion", "old_version:%s           latest_version:%s", tostring(PageLoader.old_version), tostring(PageLoader.latest_version));
+            --set temp latest_version to download assets
+            if(PageLoader.latest_version > PageLoader.old_version)then
+                PageLoader.DownloadFileModle(assets_url,assets_latest_filepath,function(s)
+                    if(s == PageLoader.status.error)then
+                        PageLoader.ShowAppPage(true,false);
+                    elseif(PageLoader.status.finished)then
+                        local assets_module = PageLoader.LoadFileModule(assets_latest_filepath);
+                        if(assets_module and assets_module.latest_assets)then
                             PageLoader.index = 0;
-                            PageLoader.download_assets = Latest_LauncherVersion.latest_assets;
+                            PageLoader.download_assets = assets_module.latest_assets;
 
                              PageLoader.DownloadNext(function(status)
                                 if(status == PageLoader.status.finished)then
                                     --update version
-                                    ParaIO.MoveFile(version_latest_filepath,version_filepath);
+                                    ParaIO.MoveFile(version_latest_filepath,version_old_filepath);
 
                                     -- load the latest packages
                                     PageLoader.ShowAppPage(true,true);
@@ -60,20 +94,15 @@ function PageLoader.CheckVersion()
                                     PageLoader.ShowAppPage(true,false);
                                 end
                             end)
-                        else
-                            PageLoader.ShowAppPage(true,false);
                         end
-                    else
-                        PageLoader.ShowAppPage(true,false);
                     end
-                end
+                end);
             else
+                -- load the old pacakges
                 PageLoader.ShowAppPage(true,false);
             end
-        else
-            PageLoader.ShowAppPage(true,false);
         end
-    end);
+    end)
 end
 function PageLoader.GetDownloadFolder_Latest()
     local s = string.format("%s_%s",version_file_prefix,PageLoader.latest_version);
