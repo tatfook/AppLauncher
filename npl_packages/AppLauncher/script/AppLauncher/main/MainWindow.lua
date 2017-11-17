@@ -44,9 +44,9 @@ function MainWindow.RefreshPage()
         MainWindow.page:Refresh(0);
     end
 end
-function MainWindow.ShowPage(url)
+function MainWindow.ShowPage()
 	local window = Window:new();
-    url = url or "script/AppLauncher/main/MainWindow.html";
+    url = "script/AppLauncher/main/MainWindow.html";
 	window:Show({
 		url = url, 
 		alignment = "_fi", left = 0, top = 0, width = 0, height = 0,
