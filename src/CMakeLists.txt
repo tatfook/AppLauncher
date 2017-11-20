@@ -30,7 +30,7 @@ list(APPEND AppLauncher_SRCS ${AppLauncher_install_FILES})
 ##############################  
 # embedded files
 set(EmbeddedResource_FILES)
-embed_resources_abs(MyResource "${LauncherScript_BINARY_DIR}/AppLauncher.zip" "${LauncherScript_BINARY_DIR}/AppLauncherTexture.zip" "${AutoUpdater_BINARY_DIR}/AutoUpdater.zip")
+embed_resources_abs(MyResource "${LauncherScript_BINARY_DIR}/AppLauncher.zip" "${LauncherScript_BINARY_DIR}/AppLauncherTexture.zip" "${AutoUpdater_BINARY_DIR}/AutoUpdater.zip" "${main_BINARY_DIR}/main.zip" )
 list(APPEND EmbeddedResource_FILES ${MyResource})
 list(APPEND AppLauncher_SRCS ${EmbeddedResource_FILES})
 SOURCE_GROUP("ResEmbedded" FILES ${EmbeddedResource_FILES})
@@ -95,4 +95,4 @@ ADD_CUSTOM_COMMAND(
    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:AppLauncher> ${APP_BIN_DIR}
 )
 
-ADD_DEPENDENCIES(AppLauncher LauncherScript AutoUpdater)
+ADD_DEPENDENCIES(AppLauncher LauncherScript AutoUpdater main)

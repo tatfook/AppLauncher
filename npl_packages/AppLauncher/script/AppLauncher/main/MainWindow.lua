@@ -19,13 +19,15 @@ local AssetsManager = commonlib.gettable("Mod.AutoUpdater.AssetsManager");
 MainWindow.selected_index = 1;
 MainWindow.cmdlines = {
     ["paracraft"] = [[single="false" noupdate="true" mc="true" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
+    ["paracraft-haqi"] = [[single="false" noupdate="true" version="kids" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
     ["haqi"] = [[single="false" version="kids" noupdate="true" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
     ["haqi2"] = [[single="false" version="teen" noupdate="true" updateurl="http://update.61.com/haqi/coreupdate_teen/;http://teenver.paraengine.com/;http://teenver.pala5.cn/;"]],
 }
 MainWindow.menus = {
-    { id = "paracraft",     label = "Paracraft创意空间",    icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",    config_file = "npl_mod/AutoUpdater/configs/paracraft.xml", },
-    { id = "haqi",          label = "魔法哈奇",             icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",         config_file = "npl_mod/AutoUpdater/configs/haqi.xml",      },
-    { id = "haqi2",         label = "魔法哈奇2",            icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",         config_file = "npl_mod/AutoUpdater/configs/haqi2.xml",      },
+    { id = "paracraft",         folder = "paracraft",       label = "Paracraft创意空间",    icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",    config_file = "script/AppLauncher/configs/paracraft.xml", },
+    { id = "paracraft-haqi",    folder = "paracraft",       label = "Paracraft-魔法哈奇",   icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",    config_file = "script/AppLauncher/configs/haqi2.xml",      },
+    { id = "haqi",              folder = "haqi",            label = "魔法哈奇",             icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",         config_file = "script/AppLauncher/configs/haqi.xml",      },
+    { id = "haqi2",             folder = "haqi2",           label = "魔法哈奇2",            icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",         config_file = "script/AppLauncher/configs/haqi2.xml",      },
 }
 MainWindow.asset_managers = {};
 function MainWindow.OnInit()
@@ -35,7 +37,7 @@ function MainWindow.OnClick(index)
     MainWindow.selected_index = index;
     local node = MainWindow.GetSelectedNode();
     if(node)then
-        MainWindow.OnCheck(node.id,node.config_file)
+        MainWindow.OnCheck(node.id,node.folder,node.config_file)
     end
     MainWindow.RefreshPage();
 end
@@ -153,9 +155,9 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
     end
     return a;
 end
-function MainWindow.OnCheck(id,config_file)
-    if(not id or not config_file)then return end
-    local redist_root = id .. "/"
+function MainWindow.OnCheck(id,folder,config_file)
+    if(not id or not folder or not config_file)then return end
+    local redist_root = folder .. "/"
 	ParaIO.CreateDirectory(redist_root);
     local a = MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file);
     if(not a)then return end

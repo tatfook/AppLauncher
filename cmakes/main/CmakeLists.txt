@@ -1,0 +1,18 @@
+# Author: leio
+# Date: 2017.11.20
+# Desc: Make an main.zip and embed it into AppLauncher
+cmake_minimum_required(VERSION 3.2)
+
+project (main)
+
+##############################
+file (GLOB_RECURSE main_FILES ${LAUNCHER_SOURCE_DIR}/npl_packages/main/script/*.lua)
+SOURCE_GROUP("src" FILES ${main_FILES})
+list(APPEND main_SRCS ${main_FILES})
+
+
+add_custom_target(main
+	COMMAND ${CMAKE_COMMAND} -E tar "cfv" "${PROJECT_BINARY_DIR}/main.zip" --format=zip script
+	WORKING_DIRECTORY "${LAUNCHER_SOURCE_DIR}/npl_packages/main"
+	COMMENT "making main zip archive"
+	SOURCES ${main_SRCS})

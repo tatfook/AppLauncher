@@ -1,0 +1,8 @@
+<configs>
+  <version>http://tmlog.paraengine.com/version.php</version>
+  <hosts>
+    <host>http://update.61.com/haqi/coreupdate/</host>
+    <host>http://tmlog.paraengine.com/</host>
+    <host>http://114.80.99.134/</host>
+  </hosts>
+</configs>

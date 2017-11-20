@@ -37,3 +37,8 @@ is included in `AppLauncher` by the `embed-resource` tool.
 The static lib of NPLRuntime links everything statically without any external dll dependencies. 
 
 So the final result of the build system is a single executable at `./release/AppLauncher.exe`
+## Debug
+```
+local launcher_debug = ParaEngine.GetAppCommandLineByParam("launcher_debug", nil);
+set launcher_debug="true" in cmdline to load local pages
+```

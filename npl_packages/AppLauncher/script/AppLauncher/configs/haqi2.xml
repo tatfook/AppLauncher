@@ -1,0 +1,8 @@
+<configs>
+  <version>http://teenver.paraengine.com/version.php</version>
+  <hosts>
+    <host>http://update.61.com/haqi/coreupdate_teen/</host>
+    <host>http://teenver.paraengine.com/</host>
+    <host>http://teenver.pala5.cn/</host>
+  </hosts>
+</configs>

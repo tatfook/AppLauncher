@@ -15,15 +15,20 @@ file (GLOB_RECURSE LauncherScript_AppLauncher_main_FILES ${PROJECT_SOURCE_DIR}/s
 SOURCE_GROUP("script\\AppLauncher\\main" FILES ${LauncherScript_AppLauncher_main_FILES})
 list(APPEND LauncherScript_SRCS ${LauncherScript_AppLauncher_main_FILES})
 
+# script/AppLauncher/configs
+file (GLOB_RECURSE LauncherScript_AppLauncher_configs_FILES ${PROJECT_SOURCE_DIR}/script/AppLauncher/configs/*.*)
+SOURCE_GROUP("script\\AppLauncher\\configs" FILES ${LauncherScript_AppLauncher_configs_FILES})
+list(APPEND LauncherScript_SRCS ${LauncherScript_AppLauncher_configs_FILES})
+
 # script/AppLauncher/lang
 file (GLOB_RECURSE LauncherScript_AppLauncher_lang_FILES ${PROJECT_SOURCE_DIR}/script/AppLauncher/lang/*.*)
 SOURCE_GROUP("script\\AppLauncher\\lang" FILES ${LauncherScript_AppLauncher_lang_FILES})
 list(APPEND LauncherScript_SRCS ${LauncherScript_AppLauncher_lang_FILES})
 
-# textures
-file (GLOB_RECURSE LauncherScript_TEXTURE_FILES ${PROJECT_SOURCE_DIR}/res/Texture/Aries/Creator/Theme/*.png)
-SOURCE_GROUP("Texture\\Aries\\Creator\\" FILES ${LauncherScript_TEXTURE_FILES})
-list(APPEND LauncherScript_SRCS ${LauncherScript_TEXTURE_FILES})
+# script/AppLauncher/versions
+file (GLOB_RECURSE LauncherScript_AppLauncher_versions_FILES ${PROJECT_SOURCE_DIR}/script/AppLauncher/versions/*.*)
+SOURCE_GROUP("script\\AppLauncher\\versions" FILES ${LauncherScript_AppLauncher_versions_FILES})
+list(APPEND LauncherScript_SRCS ${LauncherScript_AppLauncher_versions_FILES})
 
 ##############################
 # misc

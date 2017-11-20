@@ -2,6 +2,7 @@
 -- LiXizhi
 
 NPL.load("(gl)script/ide/System/System.lua")
+local launcher_debug = ParaEngine.GetAppCommandLineByParam("launcher_debug", nil);
 
 local function DumpUsedFiles()
 	local files = __rts__:GetStats({loadedfiles={}})
@@ -20,8 +21,11 @@ local function ShowLauncher()
     NPL.load("(gl)script/AppLauncher/lang/lang.lua");
 	NPL.load("script/AppLauncher/main/PageLoader.lua");
     local PageLoader = commonlib.gettable("AppLauncher.PageLoader");
-    PageLoader.CheckVersion()
-    --PageLoader.ShowAppPage();
+    if(launcher_debug)then
+        PageLoader.ShowAppPage();
+    else
+        PageLoader.CheckVersion()
+    end
 end
 
 local main_state = nil;
