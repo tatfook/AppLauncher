@@ -30,10 +30,15 @@ MainWindow.menus = {
     { id = "haqi2",             folder = "haqi2",           label = "魔法哈奇2",            icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",         config_file = "script/AppLauncher/configs/haqi2.xml",      },
 }
 MainWindow.asset_managers = {};
+
+MainWindow.IsUpdating = false
+
 function MainWindow.OnInit()
     MainWindow.page = document:GetPageCtrl();
 end
 function MainWindow.OnClick(index)
+	if MainWindow.IsUpdating then return end
+
     MainWindow.selected_index = index;
     local node = MainWindow.GetSelectedNode();
     if(node)then
@@ -67,6 +72,8 @@ function MainWindow.GetSelectedNode()
     return MainWindow.menus[MainWindow.selected_index];
 end
 function MainWindow.OnRun()
+	if MainWindow.IsUpdating then return end
+
     local node = MainWindow.GetSelectedNode();
     if(node)then
         local id = node.id;
@@ -87,12 +94,15 @@ function MainWindow.OnRun()
     end
 end
 function MainWindow.OnUpdate()
+	if MainWindow.IsUpdating then return end
+
     local node = MainWindow.GetSelectedNode();
     local id = node.id;
     local a = MainWindow.CreateOrGetAssetsManager(id);
     if(a)then
         if(a:isNeedUpdate())then
             a:download();
+			MainWindow.IsUpdating = true
         else
             MainWindow.ShowState("已经最最新版，不需要在更新");
         end
@@ -115,6 +125,7 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
                         MainWindow.ShowState("检测版本号");
                     elseif(state == AssetsManager.State.VERSION_ERROR)then
                         MainWindow.ShowState("版本号错误");
+						MainWindow.IsUpdating = false
                     elseif(state == AssetsManager.State.PREDOWNLOAD_MANIFEST)then
                         MainWindow.ShowState("准备下载文件列表");
                     elseif(state == AssetsManager.State.DOWNLOADING_MANIFEST)then
@@ -123,6 +134,7 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
                         MainWindow.ShowState("下载文件列表完成");
                     elseif(state == AssetsManager.State.MANIFEST_ERROR)then
                         MainWindow.ShowState("下载文件列表错误");
+						MainWindow.IsUpdating = false
                     elseif(state == AssetsManager.State.PREDOWNLOAD_ASSETS)then
                         MainWindow.ShowState("准备下载资源文件");
                         timer = commonlib.Timer:new({callbackFunc = function(timer)
@@ -139,14 +151,17 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
                         a:apply();
                     elseif(state == AssetsManager.State.ASSETS_ERROR)then
                         MainWindow.ShowState("下载资源文件错误");
+						MainWindow.IsUpdating = false
                     elseif(state == AssetsManager.State.PREUPDATE)then
                         MainWindow.ShowState("准备更新");
                     elseif(state == AssetsManager.State.UPDATING)then
                         MainWindow.ShowState("更新中");
                     elseif(state == AssetsManager.State.UPDATED)then
                         MainWindow.ShowState("更新完成");
+						MainWindow.IsUpdating = false
                     elseif(state == AssetsManager.State.FAIL_TO_UPDATED)then
                         MainWindow.ShowState("更新错误");
+						MainWindow.IsUpdating = false
                     end    
                 end
             end);
