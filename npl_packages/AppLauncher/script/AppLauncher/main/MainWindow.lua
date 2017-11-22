@@ -87,13 +87,13 @@ function MainWindow.OnRun()
             end
             local cmdline = MainWindow.cmdlines[id];
             if(System.os.GetPlatform()=="win32") then
-				local exe = string.format("%s%s/paraengineclient.exe",ParaIO.GetCurDirectory(0),id);
-				LOG.std(nil, "debug", "AppLauncher", "start:%s",exe);
-				ParaGlobal.ShellExecute("open", exe, cmdline, "", 1);
+                local exe = string.format("%s%s/paraengineclient.exe",ParaIO.GetCurDirectory(0),id);
+                LOG.std(nil, "debug", "AppLauncher", "start:%s",exe);
+                ParaGlobal.ShellExecute("open", exe, cmdline, "", 1);
 
-				MainWindow.IsOpenApp = true
+                MainWindow.IsOpenApp = true
 
-				ParaGlobal.Exit(0)
+                ParaGlobal.Exit(0)
             end     
         end
         
