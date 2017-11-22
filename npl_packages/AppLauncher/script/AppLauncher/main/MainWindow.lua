@@ -149,10 +149,18 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
                     elseif(state == AssetsManager.State.PREDOWNLOAD_ASSETS)then
                         MainWindow.ShowState("准备下载资源文件");
                         timer = commonlib.Timer:new({callbackFunc = function(timer)
-                            MainWindow.ShowState(a:getPercent());
                             local p = a:getPercent();
                             p = math.floor(p * 100);
                             MainWindow.ShowPercent(p);
+
+                            local totalSize = a:getTotalSize() 
+                            local downloadedSize = a:getDownloadedSize()
+
+                            local downloadSpeed = (downloadedSize - (MainWindow.LastDownloadedSize or 0)) / (timer.delta / 1000)
+                            MainWindow.LastDownloadedSize = downloadedSize
+
+                            local tips = string.format("%.1f/%.1fMB(%.1fKB/S)", downloadedSize / 1024 / 1024, totalSize / 1024 / 1024, downloadSpeed / 1024)
+                            MainWindow.ShowState(tips)
                         end})
                         timer:Change(0, 100)
                     elseif(state == AssetsManager.State.DOWNLOADING_ASSETS)then
@@ -162,7 +170,8 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
                         p = math.floor(p * 100);
                         MainWindow.ShowPercent(p);
                         if(timer)then
-                            timer:Change();
+                             timer:Change();
+                             MainWindow.LastDownloadedSize = 0
                         end
                         a:apply();
                     elseif(state == AssetsManager.State.ASSETS_ERROR)then
