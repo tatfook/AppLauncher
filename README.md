@@ -38,7 +38,13 @@ The static lib of NPLRuntime links everything statically without any external dl
 
 So the final result of the build system is a single executable at `./release/AppLauncher.exe`
 ## Debug
+- Embed main package
 ```
-local launcher_debug = ParaEngine.GetAppCommandLineByParam("launcher_debug", nil);
-set launcher_debug="true" in cmdline to load local pages
+set(MAIN_PACKAGE_EMBEDDED ON)
+```
+- Do not load remote page
+```
+append launcher_debug="true" in cmdline
+or
+using vs Debug configuration to build solution
 ```

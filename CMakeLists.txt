@@ -28,12 +28,17 @@ option(NPLRUNTIME_LUAJIT20   "build luajit2.0.4" OFF)
 option(NPLRUNTIME_LUA51   "build lua5.1.5 with coco" ON)
 option(NPLRUNTIME_SUPPORT_FBX "support FBX files (assimp)" OFF)
 option(NPLRUNTIME_PHYSICS "include physics" OFF)
+
+option(MAIN_PACKAGE_EMBEDDED "main package embedded" OFF)
+
 add_subdirectory (${LAUNCHER_SOURCE_DIR}/NPLRuntime/Client)
 
 # All NPL script package to be embedded to the executable
 add_subdirectory (${LAUNCHER_SOURCE_DIR}/npl_packages/AppLauncher)
 add_subdirectory (${LAUNCHER_SOURCE_DIR}/npl_packages/AutoUpdater)
-add_subdirectory (${LAUNCHER_SOURCE_DIR}/cmakes/main)
+IF(MAIN_PACKAGE_EMBEDDED)
+	add_subdirectory (${LAUNCHER_SOURCE_DIR}/cmakes/main)
+ENDIF(MAIN_PACKAGE_EMBEDDED)
 
 # main executable
 add_subdirectory (${LAUNCHER_SOURCE_DIR}/src)

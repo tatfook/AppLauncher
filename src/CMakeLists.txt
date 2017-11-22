@@ -26,11 +26,16 @@ file (GLOB AppLauncher_install_FILES ${PROJECT_SOURCE_DIR}/*.bat)
 SOURCE_GROUP("Installer" FILES ${AppLauncher_install_FILES})
 list(APPEND AppLauncher_SRCS ${AppLauncher_install_FILES})
 
+ADD_DEFINITIONS(-DLUA_STATICLIB)
 
 ##############################  
 # embedded files
 set(EmbeddedResource_FILES)
-embed_resources_abs(MyResource "${LauncherScript_BINARY_DIR}/AppLauncher.zip" "${LauncherScript_BINARY_DIR}/AppLauncherTexture.zip" "${AutoUpdater_BINARY_DIR}/AutoUpdater.zip" "${main_BINARY_DIR}/main.zip" )
+IF(MAIN_PACKAGE_EMBEDDED)
+	embed_resources_abs(MyResource "${LauncherScript_BINARY_DIR}/AppLauncher.zip" "${LauncherScript_BINARY_DIR}/AppLauncherTexture.zip" "${AutoUpdater_BINARY_DIR}/AutoUpdater.zip" "${main_BINARY_DIR}/main.zip" )
+ELSE()
+	embed_resources_abs(MyResource "${LauncherScript_BINARY_DIR}/AppLauncher.zip" "${LauncherScript_BINARY_DIR}/AppLauncherTexture.zip" "${AutoUpdater_BINARY_DIR}/AutoUpdater.zip" )
+ENDIF(MAIN_PACKAGE_EMBEDDED)
 list(APPEND EmbeddedResource_FILES ${MyResource})
 list(APPEND AppLauncher_SRCS ${EmbeddedResource_FILES})
 SOURCE_GROUP("ResEmbedded" FILES ${EmbeddedResource_FILES})
@@ -94,5 +99,8 @@ ADD_CUSTOM_COMMAND(
    COMMAND ${CMAKE_COMMAND} -E make_directory ${APP_BIN_DIR}
    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:AppLauncher> ${APP_BIN_DIR}
 )
-
-ADD_DEPENDENCIES(AppLauncher LauncherScript AutoUpdater main)
+SET(DEPENDENCIES_Projects LauncherScript AutoUpdater)
+IF(MAIN_PACKAGE_EMBEDDED)
+	list(APPEND DEPENDENCIES_Projects main)
+ENDIF(MAIN_PACKAGE_EMBEDDED)
+ADD_DEPENDENCIES(AppLauncher ${DEPENDENCIES_Projects})

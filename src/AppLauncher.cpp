@@ -31,6 +31,10 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR lpCmdLine, INT )
 		std::string sCmd = lpCmdLine;
 		sCmd.append(" bootstrapper=\"script/AppLauncher/main/main.lua\"");
 
+#ifdef _DEBUG
+		sCmd.append(" launcher_debug=\"true\"");
+#endif // _DEBUG
+
 		if (pParaEngineApp->StartApp(sCmd.c_str()) != S_OK)
 			return E_FAIL;
 
@@ -38,12 +42,13 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR lpCmdLine, INT )
 		ADD_RESOURCE("npl_packages/LauncherScript.zip", AppLauncher_zip);
 		ADD_RESOURCE("npl_packages/AppLauncherTexture.zip", AppLauncherTexture_zip);
 		ADD_RESOURCE("npl_packages/Mod_AutoUpdater.zip", AutoUpdater_zip);
-		ADD_RESOURCE("cmakes/main/Mod_main.zip", main_zip);
 		pParaEngineApp->LoadNPLPackage("npl_packages/LauncherScript/");
 		pParaEngineApp->LoadNPLPackage("npl_packages/AppLauncherTexture/");
 		pParaEngineApp->LoadNPLPackage("npl_packages/Mod_AutoUpdater/");
+#ifdef NDEBUG
+		ADD_RESOURCE("cmakes/main/Mod_main.zip", main_zip);
 		pParaEngineApp->LoadNPLPackage("cmakes/main/Mod_main/");
-
+#endif
 		// Run to end
 		auto result = pParaEngineApp->Run(hInst);
 		pParaEngine->Destroy();

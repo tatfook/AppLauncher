@@ -60,6 +60,11 @@ function MainWindow.ShowState(s)
         MainWindow.page:SetValue("state_txt",tostring(s));
     end
 end
+function MainWindow.ShowPercent(percent)
+    if(MainWindow.page)then
+        MainWindow.page:SetValue("progress_bar",percent);
+    end
+end
 function MainWindow.GetSelectedIndex()
     return MainWindow.selected_index;
 end
@@ -127,12 +132,17 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
                         MainWindow.ShowState("准备下载资源文件");
                         timer = commonlib.Timer:new({callbackFunc = function(timer)
                             MainWindow.ShowState(a:getPercent());
+                            local p = a:getPercent();
+                            p = math.floor(p * 100);
+                            MainWindow.ShowPercent(p);
                         end})
                         timer:Change(0, 100)
                     elseif(state == AssetsManager.State.DOWNLOADING_ASSETS)then
                     elseif(state == AssetsManager.State.ASSETS_DOWNLOADED)then
                         MainWindow.ShowState("下载资源文件结束");
-                        MainWindow.ShowState(a:getPercent());
+                        local p = a:getPercent();
+                        p = math.floor(p * 100);
+                        MainWindow.ShowPercent(p);
                         if(timer)then
                             timer:Change();
                         end
@@ -161,6 +171,7 @@ function MainWindow.OnCheck(id,folder,config_file)
 	ParaIO.CreateDirectory(redist_root);
     local a = MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file);
     if(not a)then return end
+    MainWindow.ShowPercent(0);
     a:check(nil,function()
         local cur_version = a:getCurVersion();
         local latest_version = a:getLatestVersion();
@@ -168,6 +179,7 @@ function MainWindow.OnCheck(id,folder,config_file)
             MainWindow.ShowState(string.format(L"当前版本(%s)        最新版本(%s)",cur_version, latest_version));
         else
             MainWindow.ShowState(string.format(L"版本(%s)",latest_version));
+            MainWindow.ShowPercent(100);
         end
     end);
 end
