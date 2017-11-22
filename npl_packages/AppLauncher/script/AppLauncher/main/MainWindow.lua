@@ -74,6 +74,8 @@ end
 function MainWindow.OnRun()
 	if MainWindow.IsUpdating then return end
 
+	if MainWindow.IsOpenApp then return end
+
     local node = MainWindow.GetSelectedNode();
     if(node)then
         local id = node.id;
@@ -85,10 +87,14 @@ function MainWindow.OnRun()
             end
             local cmdline = MainWindow.cmdlines[id];
             if(System.os.GetPlatform()=="win32") then
-                local exe = string.format("%s%s/paraengineclient.exe",ParaIO.GetCurDirectory(0),id);
-	            LOG.std(nil, "debug", "AppLauncher", "start:%s",exe);
-                ParaGlobal.ShellExecute("open", exe, cmdline, "", 1);
-            end        
+				local exe = string.format("%s%s/paraengineclient.exe",ParaIO.GetCurDirectory(0),id);
+				LOG.std(nil, "debug", "AppLauncher", "start:%s",exe);
+				ParaGlobal.ShellExecute("open", exe, cmdline, "", 1);
+
+				MainWindow.IsOpenApp = true
+
+				ParaGlobal.Exit(0)
+            end     
         end
         
     end
