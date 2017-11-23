@@ -155,12 +155,15 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
 
                             local totalSize = a:getTotalSize() 
                             local downloadedSize = a:getDownloadedSize()
+                            local lastDownloadedSize = (MainWindow.LastDownloadedSize or 0)
 
-                            local downloadSpeed = (downloadedSize - (MainWindow.LastDownloadedSize or 0)) / (timer.delta / 1000)
-                            MainWindow.LastDownloadedSize = downloadedSize
+                            if downloadedSize > lastDownloadedSize then
+                                local downloadSpeed = (downloadedSize - lastDownloadedSize) / (timer.delta / 1000)
+                                MainWindow.LastDownloadedSize = downloadedSize
 
-                            local tips = string.format("%.1f/%.1fMB(%.1fKB/S)", downloadedSize / 1024 / 1024, totalSize / 1024 / 1024, downloadSpeed / 1024)
-                            MainWindow.ShowState(tips)
+                                local tips = string.format("%.1f/%.1fMB(%.1fKB/S)", downloadedSize / 1024 / 1024, totalSize / 1024 / 1024, downloadSpeed / 1024)
+                                MainWindow.ShowState(tips)
+                            end
                         end})
                         timer:Change(0, 100)
                     elseif(state == AssetsManager.State.DOWNLOADING_ASSETS)then
@@ -182,6 +185,7 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
                     elseif(state == AssetsManager.State.UPDATING)then
                         MainWindow.ShowState("更新中");
                     elseif(state == AssetsManager.State.UPDATED)then
+                        LOG.std(nil, "debug", "AppLauncher", "更新完成")
                         MainWindow.ShowState("更新完成");
 						MainWindow.IsUpdating = false
                     elseif(state == AssetsManager.State.FAIL_TO_UPDATED)then
@@ -189,6 +193,8 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
 						MainWindow.IsUpdating = false
                     end    
                 end
+            end, function (dest, cur, total)
+                MainWindow.OnMovingFileCallback(dest, cur, total) 
             end);
         end
         MainWindow.asset_managers[id] = a;
@@ -212,4 +218,12 @@ function MainWindow.OnCheck(id,folder,config_file)
             MainWindow.ShowPercent(100);
         end
     end);
+end
+
+function MainWindow.OnMovingFileCallback(dest, cur, total) 
+    local tips = string.format(L"更新%s (%d/%d)", dest, cur, total)
+    MainWindow.ShowState(tips)
+
+    local percent = 100 * cur / total
+    MainWindow.ShowPercent(percent)
 end
