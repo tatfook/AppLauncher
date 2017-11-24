@@ -148,6 +148,11 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
 						MainWindow.IsUpdating = false
                     elseif(state == AssetsManager.State.PREDOWNLOAD_ASSETS)then
                         MainWindow.ShowState("准备下载资源文件");
+
+                        local nowTime = 0
+                        local lastTime = 0
+                        local interval = 100
+                        local lastDownloadedSize = 0
                         timer = commonlib.Timer:new({callbackFunc = function(timer)
                             local p = a:getPercent();
                             p = math.floor(p * 100);
@@ -155,17 +160,19 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
 
                             local totalSize = a:getTotalSize() 
                             local downloadedSize = a:getDownloadedSize()
-                            local lastDownloadedSize = (MainWindow.LastDownloadedSize or 0)
+
+                            nowTime = nowTime + interval
 
                             if downloadedSize > lastDownloadedSize then
-                                local downloadSpeed = (downloadedSize - lastDownloadedSize) / (timer.delta / 1000)
-                                MainWindow.LastDownloadedSize = downloadedSize
+                                local downloadSpeed = (downloadedSize - lastDownloadedSize) / ((nowTime - lastTime) / 1000)
+                                lastDownloadedSize = downloadedSize
+                                lastTime = nowTime
 
                                 local tips = string.format("%.1f/%.1fMB(%.1fKB/S)", downloadedSize / 1024 / 1024, totalSize / 1024 / 1024, downloadSpeed / 1024)
                                 MainWindow.ShowState(tips)
                             end
                         end})
-                        timer:Change(0, 100)
+                        timer:Change(0, interval)
                     elseif(state == AssetsManager.State.DOWNLOADING_ASSETS)then
                     elseif(state == AssetsManager.State.ASSETS_DOWNLOADED)then
                         MainWindow.ShowState("下载资源文件结束");

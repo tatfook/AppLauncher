@@ -23,7 +23,7 @@ PageLoader.status = {
     error = 2,
 }
 PageLoader.download_assets = nil;
-PageLoader.old_version = -1;
+PageLoader.old_version = 0;
 PageLoader.latest_version = 0;
 function PageLoader.LoadFileModule(path)
     if(not path)then return {} end
