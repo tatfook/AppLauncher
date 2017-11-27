@@ -2,7 +2,7 @@
 Title: MainWindow
 Author(s): leio
 Date: 2017/10/16
-Desc: 
+Desc:
 use the lib:
 ------------------------------------------------------------
 NPL.load("script/AppLauncher/main/MainWindow.lua");
@@ -13,6 +13,7 @@ MainWindow.ShowPage();
 NPL.load("(gl)script/ide/System/Windows/Window.lua");
 NPL.load("(gl)script/ide/System/os/run.lua");
 NPL.load("npl_mod/AutoUpdater/AssetsManager.lua");
+NPL.load("script/AppLauncher/main/TipsWindow.lua");
 local Window = commonlib.gettable("System.Windows.Window")
 local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
 local AssetsManager = commonlib.gettable("Mod.AutoUpdater.AssetsManager");
@@ -55,7 +56,7 @@ function MainWindow.ShowPage()
 	local window = Window:new();
     url = "script/AppLauncher/main/MainWindow.html";
 	window:Show({
-		url = url, 
+		url = url,
 		alignment = "_fi", left = 0, top = 0, width = 0, height = 0,
 	});
     MainWindow.OnClick(MainWindow.selected_index);
@@ -86,8 +87,11 @@ function MainWindow.OnRun()
         local id = node.id;
         local a = MainWindow.CreateOrGetAssetsManager(id);
         if(a)then
-            if(not a:hasVersionFile())then
-                MainWindow.OnUpdate();
+            if not a:hasVersionFile() or a:isNeedUpdate() then
+                --MainWindow.OnUpdate();
+
+                local TipsWindow = commonlib.gettable("AppLauncher.TipsWindow")
+                TipsWindow.ShowPage()
                 return
             end
             local cmdline = MainWindow.cmdlines[id];
@@ -99,9 +103,9 @@ function MainWindow.OnRun()
                 MainWindow.IsOpenApp = true
 
                 ParaGlobal.Exit(0)
-            end     
+            end
         end
-        
+
     end
 end
 function MainWindow.OnUpdate()
@@ -158,7 +162,7 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
                             p = math.floor(p * 100);
                             MainWindow.ShowPercent(p);
 
-                            local totalSize = a:getTotalSize() 
+                            local totalSize = a:getTotalSize()
                             local downloadedSize = a:getDownloadedSize()
 
                             nowTime = nowTime + interval
@@ -198,10 +202,10 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
                     elseif(state == AssetsManager.State.FAIL_TO_UPDATED)then
                         MainWindow.ShowState("更新错误");
 						MainWindow.IsUpdating = false
-                    end    
+                    end
                 end
             end, function (dest, cur, total)
-                MainWindow.OnMovingFileCallback(dest, cur, total) 
+                MainWindow.OnMovingFileCallback(dest, cur, total)
             end);
         end
         MainWindow.asset_managers[id] = a;
@@ -227,7 +231,7 @@ function MainWindow.OnCheck(id,folder,config_file)
     end);
 end
 
-function MainWindow.OnMovingFileCallback(dest, cur, total) 
+function MainWindow.OnMovingFileCallback(dest, cur, total)
     local tips = string.format(L"更新%s (%d/%d)", dest, cur, total)
     MainWindow.ShowState(tips)
 
