@@ -92,22 +92,13 @@ function MainWindow.OnRun()
 
                 local TipsWindow = commonlib.gettable("AppLauncher.TipsWindow")
                 TipsWindow.ShowPage()
-                return
-            end
-            local cmdline = MainWindow.cmdlines[id];
-            if(System.os.GetPlatform()=="win32") then
-                local exe = string.format("%s%s/paraengineclient.exe",ParaIO.GetCurDirectory(0),id);
-                LOG.std(nil, "debug", "AppLauncher", "start:%s",exe);
-                ParaGlobal.ShellExecute("open", exe, cmdline, "", 1);
-
-                MainWindow.IsOpenApp = true
-
-                ParaGlobal.Exit(0)
+            else
+                MainWindow.OpenApp(id)
             end
         end
-
     end
 end
+
 function MainWindow.OnUpdate()
 	if MainWindow.IsUpdating then return end
 
@@ -123,6 +114,20 @@ function MainWindow.OnUpdate()
         end
     end
 end
+
+function MainWindow.OpenApp(id)
+    local cmdline = MainWindow.cmdlines[id];
+    if(System.os.GetPlatform()=="win32") then
+        local exe = string.format("%s%s/paraengineclient.exe",ParaIO.GetCurDirectory(0),id);
+        LOG.std(nil, "debug", "AppLauncher", "start:%s",exe);
+        ParaGlobal.ShellExecute("open", exe, cmdline, "", 1);
+
+        MainWindow.IsOpenApp = true
+
+        ParaGlobal.Exit(0)
+    end
+end
+
 function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
     if(not id)then return end
     local a = MainWindow.asset_managers[id];
