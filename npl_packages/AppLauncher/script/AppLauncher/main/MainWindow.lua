@@ -23,12 +23,14 @@ MainWindow.cmdlines = {
     ["paracraft-haqi"] = [[single="false" noupdate="true" version="kids" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
     ["haqi"] = [[single="false" version="kids" noupdate="true" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
     ["haqi2"] = [[single="false" version="teen" noupdate="true" updateurl="http://update.61.com/haqi/coreupdate_teen/;http://teenver.paraengine.com/;http://teenver.pala5.cn/;"]],
+    ["truckstar"] = [[]],
 }
 MainWindow.menus = {
-    { id = "paracraft",         folder = "paracraft",       label = "Paracraft创意空间",    icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",    config_file = "script/AppLauncher/configs/paracraft.xml", },
-    { id = "paracraft-haqi",    folder = "paracraft",       label = "Paracraft-魔法哈奇",   icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",    config_file = "script/AppLauncher/configs/haqi2.xml",      },
-    { id = "haqi",              folder = "haqi",            label = "魔法哈奇",             icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",         config_file = "script/AppLauncher/configs/haqi.xml",      },
-    { id = "haqi2",             folder = "haqi2",           label = "魔法哈奇2",            icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",         config_file = "script/AppLauncher/configs/haqi2.xml",      },
+    { id = "paracraft",         folder = "paracraft",  executable="paraengineclient",   label = "Paracraft创意空间",    icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",    config_file = "script/AppLauncher/configs/paracraft.xml", },
+    { id = "paracraft-haqi",    folder = "paracraft",  executable="paraengineclient",   label = "Paracraft-魔法哈奇",   icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",    config_file = "script/AppLauncher/configs/haqi2.xml",      },
+    { id = "haqi",              folder = "haqi",       executable="paraengineclient",   label = "魔法哈奇",             icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",         config_file = "script/AppLauncher/configs/haqi.xml",      },
+    { id = "haqi2",             folder = "haqi2",      executable="paraengineclient",   label = "魔法哈奇2",            icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",         config_file = "script/AppLauncher/configs/haqi2.xml",      },
+    { id = "truckstar",         folder = "truckstar",  executable="Launcher",           label = "创意空间童趣版",        icon = "Texture/AppLauncherRes/truckstar_logo_32bits.png#0 0 36 36",    config_file = "script/AppLauncher/configs/truckstar.xml",      },
 }
 MainWindow.asset_managers = {};
 
@@ -117,8 +119,9 @@ end
 
 function MainWindow.OpenApp(id)
     local cmdline = MainWindow.cmdlines[id];
-    if(System.os.GetPlatform()=="win32") then
-        local exe = string.format("%s%s/paraengineclient.exe",ParaIO.GetCurDirectory(0),id);
+    local node = MainWindow.GetSelectedNode();
+    if(System.os.GetPlatform()=="win32" and node) then
+        local exe = string.format("%s%s/%s.exe",ParaIO.GetCurDirectory(0),id,node.executable);
         LOG.std(nil, "debug", "AppLauncher", "start:%s",exe);
         ParaGlobal.ShellExecute("open", exe, cmdline, "", 1);
 
