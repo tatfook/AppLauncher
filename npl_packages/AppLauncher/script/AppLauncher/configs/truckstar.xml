@@ -1,0 +1,6 @@
+<configs>
+  <version>http://121.14.117.241:8095/update/release/version.txt</version>
+  <hosts>
+    <host>http://121.14.117.241:8095/update/release/</host>
+  </hosts>
+</configs>
