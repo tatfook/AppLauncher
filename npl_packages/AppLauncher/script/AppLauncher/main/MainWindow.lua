@@ -26,11 +26,11 @@ MainWindow.cmdlines = {
     ["truckstar"] = [[]],
 }
 MainWindow.menus = {
-    { id = "paracraft",         folder = "paracraft",  executable="paraengineclient",   label = "Paracraft创意空间",    icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",    config_file = "script/AppLauncher/configs/paracraft.xml", },
-    { id = "paracraft-haqi",    folder = "paracraft",  executable="paraengineclient",   label = "Paracraft-魔法哈奇",   icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",    config_file = "script/AppLauncher/configs/haqi2.xml",      },
-    { id = "haqi",              folder = "haqi",       executable="paraengineclient",   label = "魔法哈奇",             icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",         config_file = "script/AppLauncher/configs/haqi.xml",      },
-    { id = "haqi2",             folder = "haqi2",      executable="paraengineclient",   label = "魔法哈奇2",            icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",         config_file = "script/AppLauncher/configs/haqi2.xml",      },
-    { id = "truckstar",         folder = "truckstar",  executable="Launcher",           label = "创意空间童趣版",        icon = "Texture/AppLauncherRes/truckstar_logo_32bits.png#0 0 36 36",    config_file = "script/AppLauncher/configs/truckstar.xml",      },
+    { id = "paracraft",         folder = "paracraft",  executable="paraengineclient",   label = "Paracraft创意空间",    icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",   window_bg = "paracraft/paracraft_window_bg_32bit.png",  config_file = "script/AppLauncher/configs/paracraft.xml", },
+    { id = "paracraft-haqi",	folder = "paracraft",  executable="paraengineclient",	label = "Paracraft-魔法哈奇",   icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",   window_bg = "",  config_file = "script/AppLauncher/configs/haqi2.xml",	   },
+    { id = "haqi",		folder = "haqi",       executable="paraengineclient",	label = "魔法哈奇",             icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",	      window_bg = "",  config_file = "script/AppLauncher/configs/haqi.xml",	  },
+    { id = "haqi2",		folder = "haqi2",      executable="paraengineclient",	label = "魔法哈奇2",            icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",        window_bg = "",  config_file = "script/AppLauncher/configs/haqi2.xml",	   },
+    { id = "truckstar",		folder = "truckstar",  executable="Launcher",		label = "创意空间童趣版",        icon = "Texture/AppLauncherRes/truckstar_logo_32bits.png#0 0 36 36",   window_bg = "truckstar/truckstar_window_bg_32bit.png",  config_file = "script/AppLauncher/configs/truckstar.xml",	},
 }
 MainWindow.asset_managers = {};
 
@@ -221,6 +221,19 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
     return a;
 end
 function MainWindow.OnCheck(id,folder,config_file)
+    --setting up window bg for current app
+    local window_bg = MainWindow.page:GetNode("window_background");
+    if window_bg then
+        local current_node = MainWindow.GetSelectedNode();
+        local win_bg_img = "bg_32bits.png#0 0 1110 660:4 4 4 4";
+        if current_node and current_node.window_bg and string.len(current_node.window_bg)>0 then
+            win_bg_img = current_node.window_bg;
+        end
+        local style_str = string.format("background:url(Texture/AppLauncherRes/%s)", win_bg_img);
+        window_bg:SetAttribute("style", style_str);
+        MainWindow.RefreshPage();
+    end
+    
     if(not id or not folder or not config_file)then return end
     local redist_root = folder .. "/"
 	ParaIO.CreateDirectory(redist_root);
