@@ -2,7 +2,7 @@
 Title: PageLoader.lua
 Author(s): leio
 Date: 2017/11/9
-Desc: 
+Desc:
 use the lib:
 ------------------------------------------------------------
 NPL.load("script/AppLauncher/main/PageLoader.lua");
@@ -39,7 +39,7 @@ function PageLoader.DownloadFileModle(url,filepath,callback)
         callback(PageLoader.status.error);
         return
     end
-    System.os.GetUrl(url, function(err, msg, data)  
+    System.os.GetUrl(url, function(err, msg, data)
         if(err == 200)then
             if(data)then
                 ParaIO.CreateDirectory(filepath);
@@ -72,11 +72,13 @@ function PageLoader.CheckVersion()
             PageLoader.latest_version = version_module.version or 0;
 	        LOG.std(nil, "debug", "CheckVersion", "old_version:%s           latest_version:%s", tostring(PageLoader.old_version), tostring(PageLoader.latest_version));
             --set temp latest_version to download assets
-            if(PageLoader.latest_version > PageLoader.old_version)then
+            if (PageLoader.latest_version > PageLoader.old_version) then
                 PageLoader.DownloadFileModle(assets_url,assets_latest_filepath,function(s)
                     if(s == PageLoader.status.error)then
+                        LOG.std(nil, "debug", "DownloadFile", "error")
                         PageLoader.ShowAppPage(true,false);
                     elseif(PageLoader.status.finished)then
+                        LOG.std(nil, "debug", "DownloadFile", "finished")
                         local assets_module = PageLoader.LoadFileModule(assets_latest_filepath);
                         if(assets_module and assets_module.latest_assets)then
                             PageLoader.index = 0;
@@ -87,8 +89,21 @@ function PageLoader.CheckVersion()
                                     --update version
                                     ParaIO.MoveFile(version_latest_filepath,version_old_filepath);
 
-                                    -- load the latest packages
-                                    PageLoader.ShowAppPage(true,true);
+                                    local hasAppLauncher = false
+                                    for i = 1, #PageLoader.download_assets do
+                                        local name = PageLoader.download_assets[i].name
+                                        if name == "AppLauncher.exe" then
+                                            hasAppLauncher = true
+                                            break
+                                        end
+                                    end
+                                    if hasAppLauncher then
+                                        -- relaunch AppLauncher
+                                        PageLoader.RestartAppLauncher()
+                                    else
+                                        -- load the latest packages
+                                        PageLoader.ShowAppPage(true,true);
+                                    end
                                 else
                                     -- load the old pacakges
                                     PageLoader.ShowAppPage(true,false);
@@ -130,14 +145,14 @@ function PageLoader.DownloadNext(callback)
     PageLoader.index = PageLoader.index + 1;
     local len = #PageLoader.download_assets;
     if(PageLoader.index > len)then
-        callback(PageLoader.status.finished);  
-        return;      
+        callback(PageLoader.status.finished);
+        return;
     end
     local page = PageLoader.download_assets[PageLoader.index];
     local url = page.url;
     local name = page.name;
 	LOG.std(nil, "debug", "PageLoader", "Downloading:%s", url);
-    System.os.GetUrl(url, function(err, msg, data)  
+    System.os.GetUrl(url, function(err, msg, data)
 	        LOG.std(nil, "debug", "PageLoader", "Download status:%d", err);
             if(err == 200)then
                 if(data)then
@@ -150,10 +165,19 @@ function PageLoader.DownloadNext(callback)
                         PageLoader.DownloadNext(callback);
                         return;
                     end
-                    callback(PageLoader.status.error);        
+                    callback(PageLoader.status.error);
                 end
             else
-                callback(PageLoader.status.error);        
+                callback(PageLoader.status.error);
             end
         end);
+end
+
+function PageLoader.RestartAppLauncher()
+    local launcher_debug = ParaEngine.GetAppCommandLineByParam("launcher_debug", nil)
+    if System.os.GetPlatform() == "win32" then
+        local exeName = launcher_debug and "AppLauncher_d.exe" or "AppLauncher.exe"
+        ParaGlobal.ShellExecute("open", exeName, "", "", 1)
+        ParaGlobal.Exit(0)
+    end
 end
