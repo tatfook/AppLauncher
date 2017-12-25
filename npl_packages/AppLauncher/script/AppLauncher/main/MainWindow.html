@@ -44,27 +44,27 @@ end
 </div>
 <input type="button" name="update_btn" value="update" tooltip="aaaaaa" onclick="DoUpdate()"/>-->
 <div name="window_background" width="100%" height="100%" style="background:;">
-    <div style="padding:15px;">
+    <div style="padding:15px;background-color:#77777777">
         <div style="width:128px;height:15px;margin-top:10px;background:url(Texture/AppLauncherRes/keepwork_logo_32bits.png#0 0 128 15)"></div>
         <div align="right" style="margin-top:-15px;">
-            <input type="button" value="登录" onclick="OnLogin()" style="float:left;width:80px;height:35px;color:#ffffff;font:bold;background:url(Texture/AppLauncherRes/btn_blue_32bits.png#0 0 19 16:6 6 6 6)"/>
-            <input type="button" value="注册" onclick="OnRegister()" style="float:left;margin-left:20px;width:80px;height:35px;color:#ffffff;font:bold;background:url(Texture/AppLauncherRes/btn_black_32bits.png#0 0 14 15:6 6 6 6)"/>
+            <input type="button" onclick="OnLogin()" style="float:left;width:101px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue_32bits.png:6 6 6 6)"/>
+            <input type="button" onclick="OnRegister()" style="float:left;margin-left:20px;width:101px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_black_32bits.png:6 6 6 6)"/>
         </div>
     </div>
     <!--horizontal line-->
     <div width="100%" style="height:1px;background-color:#ffffff"/>
     <div >
-        <div style="float:left;width:200px;" height="100%">
-            <div >
-                <pe:gridview DataSource="<%=GetDataSource %>" name="menuList" 
+        <div style="float:left;width:200px;background-color:#111111dd" height="100%">
+            <div>
+                <pe:gridview DataSource="<%=GetDataSource %>" name="menuList"
                     CellPadding="0" ItemsPerLine="1" AllowPaging="false" pagesize="100">
                     <Columns>
                         <div>
                             <pe:if condition='<%=IsSelected(Eval("index"))%>' >
-                                <div width="100%" style="padding-left:10px;padding-top:7px;width:200px;height:50px;background:url(Texture/AppLauncherRes/menu_selected_32bits.png:6 6 6 6)">
+                                <div width="100%" style="padding-left:10px;padding-top:7px;width:200px;height:50px;background:url(Texture/AppLauncherRes/newskin/underline_32bits.png:6 6 6 6)">
                                     <img width="36" height="36" src='<%=Eval("icon")%>'/>
                                     <div style="float:left;margin-left:5px;margin-top:10px;color:#ffffff;" ><%=Eval("label")%></div>
-                                </div>    
+                                </div>
                             </pe:if>
                             <pe:if condition='<%=not IsSelected(Eval("index"))%>' >
                                 <div width="100%" name='<%=Eval("index")%>' onclick='OnSelected()'  style="padding-left:10px;padding-top:7px;width:200px;height:50px;">
@@ -114,7 +114,7 @@ end
                                     <div style="float:left;margin-left:10px;color:#ffffff;">Paracraft电影方块教程</div>
                                 </div>
                             </div>
-                            
+
                             <div align="right" style="color:#ffffff">
                                 <div style="float:left;">查看更多</div>
                                 <div style="float:left;margin-left:2px;margin-top:2px;width:16px;height:16px;background:url(Texture/AppLauncherRes/arrow_right_32bits.png)"/>
@@ -131,32 +131,30 @@ end
                     </div>
                 </div>
             </pe:if>
-            <div style="margin-top:-10px;">
+            <div style="margin-top:-30px;">
                 <div>
-                    <input type="button" value="进入" onclick="OnRun()" style="float:left;width:180px;height:46px;color:#ffffff;font:bold;background:url(Texture/AppLauncherRes/btn_blue_32bits.png#0 0 19 16:6 6 6 6)"/>
+                    <input type="button" onclick="OnRun()" style="float:left;width:121px;height:61px;background:url(Texture/AppLauncherRes/newskin/btn_enter_32bits.png:6 6 6 6)"/>
+                    <input type="button" onclick="OnUpdate()" style="float:left;margin-left:10px;width:121px;height:61px;background:url(Texture/AppLauncherRes/newskin/btn_update_32bits.png:6 6 6 6)"></input>
                     <div style="float:left;padding-right:10px;">
-                        <div align="right" >
+                        <div align="center" style="background:url(Texture/AppLauncherRes/newskin/frame_black_32bits.png:6 6 6 6)">
                             <div style="float:left;color:#ffffff">
-                                <pe:label name="state_txt" style="width:400px;height:25px;text-align:left;"/>
-                            </div>
-                            <div style="float:left;margin-left:20px;margin-top:5px;color:#66b8ff;" onclick="OnUpdate()">
-                                点击更新
+                                <pe:label name="state_txt" style="width:400px;height:25px;text-align:center;"/>
                             </div>
                         </div>
-                        <div align="right" style="padding:1px;background-color:#747170">
-                            <div style="width:600px;height:16px;background-color:#000000">
-                                <pe:progressbar name="progress_bar" width="100%" style="height:16px;" Minimum = "0" Maximum = "100" Value="75" blockimage="Texture/AppLauncherRes/progressbar_32bits.png:6 6 6 6" background="" />
-                            </div>
+
+                        <div style="width:538px;height:21px;background:url(Texture/AppLauncherRes/newskin/progress_black_32bits.png:6 6 6 6)">
+                            <pe:progressbar name="progress_bar" width="100%" style="height:21px;" Minimum = "0" Maximum = "100" Value="75" blockimage="Texture/AppLauncherRes/newskin/progress_blue_32bits.png:6 6 6 6" background="" />
                         </div>
-                            <div align="right" style="color:#7d7d7d;font-size:12px;">
-                                © 2014 Tatfool Powered by ParaEngine and NPL
+
+                        <div align="right" style="color:#7d7d7d;font-size:12px;">
+                            © 2014 Tatfool Powered by ParaEngine and NPL
                         </div>
                     </div>
                 </div>
-                   
+
             </div>
         </div>
     </div>
-        
+
 </div>
 </pe:mcml>

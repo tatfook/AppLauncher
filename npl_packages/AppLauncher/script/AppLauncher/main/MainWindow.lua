@@ -19,14 +19,14 @@ local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
 local AssetsManager = commonlib.gettable("Mod.AutoUpdater.AssetsManager");
 MainWindow.selected_index = 1;
 MainWindow.cmdlines = {
-    ["paracraft"] = [[single="false" noupdate="true" mc="true" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
-    ["paracraft-haqi"] = [[single="false" noupdate="true" version="kids" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
-    ["haqi"] = [[single="false" version="kids" noupdate="true" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
-    ["haqi2"] = [[single="false" version="teen" noupdate="true" updateurl="http://update.61.com/haqi/coreupdate_teen/;http://teenver.paraengine.com/;http://teenver.pala5.cn/;"]],
+    ["paracraft"] = [[single="true" noupdate="true" mc="true" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
+    ["paracraft-haqi"] = [[single="true" noupdate="true" version="kids" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
+    ["haqi"] = [[single="true" version="kids" noupdate="true" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
+    ["haqi2"] = [[single="true" version="teen" noupdate="true" updateurl="http://update.61.com/haqi/coreupdate_teen/;http://teenver.paraengine.com/;http://teenver.pala5.cn/;"]],
     ["truckstar"] = [[]],
 }
 MainWindow.menus = {
-    { id = "paracraft",         folder = "paracraft",  executable="paraengineclient",   label = "Paracraft创意空间",    icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",   window_bg = "paracraft/paracraft_window_bg_32bit.png",  config_file = "script/AppLauncher/configs/paracraft.xml", },
+    { id = "paracraft",         folder = "paracraft",  executable="paraengineclient",   label = "Paracraft创意空间",    icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",   window_bg = "newskin/background1_32bits.png",  config_file = "script/AppLauncher/configs/paracraft.xml", },
     { id = "paracraft-haqi",	folder = "paracraft",  executable="paraengineclient",	label = "Paracraft-魔法哈奇",   icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",   window_bg = "",  config_file = "script/AppLauncher/configs/haqi2.xml",	   },
     { id = "haqi",		folder = "haqi",       executable="paraengineclient",	label = "魔法哈奇",             icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",	      window_bg = "",  config_file = "script/AppLauncher/configs/haqi.xml",	  },
     { id = "haqi2",		folder = "haqi2",      executable="paraengineclient",	label = "魔法哈奇2",            icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",        window_bg = "",  config_file = "script/AppLauncher/configs/haqi2.xml",	   },
@@ -233,7 +233,7 @@ function MainWindow.OnCheck(id,folder,config_file)
         window_bg:SetAttribute("style", style_str);
         MainWindow.RefreshPage();
     end
-    
+
     if(not id or not folder or not config_file)then return end
     local redist_root = folder .. "/"
 	ParaIO.CreateDirectory(redist_root);

@@ -1,0 +1,76 @@
+<pe:mcml>
+<script type="text/npl" src="MainWindow.lua">
+    <![CDATA[
+    NPL.load("script/AppLauncher/main/MainWindow.lua");
+    local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
+    MainWindow.OnInit();
+    function DoUpdate()
+        MainWindow.DoUpdate();
+    end
+    function GetDataSource(index)
+    	if(index == nil) then
+    		return #(MainWindow.menus);
+    	else
+    		return MainWindow.menus[index];
+    	end
+    end
+    function IsSelected(index)
+        return MainWindow.selected_index == index;
+    end
+    function OnSelected(index)
+        MainWindow.OnClick(index);
+    end
+    function GetSelectedIndex()
+        return MainWindow.GetSelectedIndex();
+    end
+    function OnLogin()
+        echo("============OnLogin");
+    end
+    function OnRegister()
+        echo("============OnRegister");
+    end
+    function OnUpdate()
+        MainWindow.OnUpdate();
+    end
+    function OnRun()
+        MainWindow.OnRun();
+    end]]>
+</script>
+
+<div name="window_background" width="100%" height="100%" style="background:;">
+    <div width="100%" height="100%" style="width:1020px;height:595px;background:url(Texture/ApplauncherRes/newskin/frame_32bits.png#0 0 1020 595)">
+        <div style="padding:15px;">
+            <div align="right" style="margin-top:20px;">
+                <input type="button" onclick="OnLogin()" style="float:left;width:101px;height:38px;color:#ffffff;background:url(Texture/AppLauncherRes/newskin/btn_login_32bits.png)"/>
+                <input type="button" onclick="OnRegister()" style="float:left;margin-left:20px;width:101px;height:38px;color:#ffffff;background:url(Texture/AppLauncherRes/newskin/btn_register_32bits.png)"/>
+            </div>
+        </div>
+        <div >
+            <div style="float:left;width:200px;" height="100%">
+                <div >
+                    <pe:gridview DataSource="<%=GetDataSource %>" name="menuList"
+                        CellPadding="0" ItemsPerLine="1" AllowPaging="false" pagesize="100">
+                        <Columns>
+                            <div>
+                                <pe:if condition='<%=IsSelected(Eval("index"))%>' >
+                                    <div width="100%" style="padding-left:10px;padding-top:7px;width:200px;height:50px;background:url(Texture/AppLauncherRes/menu_selected_32bits.png:6 6 6 6)">
+                                        <img width="36" height="36" src='<%=Eval("icon")%>'/>
+                                        <div style="float:left;margin-left:5px;margin-top:10px;color:#ffffff;" ><%=Eval("label")%></div>
+                                    </div>
+                                </pe:if>
+                                <pe:if condition='<%=not IsSelected(Eval("index"))%>' >
+                                    <div width="100%" name='<%=Eval("index")%>' onclick='OnSelected()'  style="padding-left:10px;padding-top:7px;width:200px;height:50px;">
+                                        <img width="36" height="36" src='<%=Eval("icon")%>'/>
+                                        <div style="float:left;margin-left:5px;margin-top:10px;color:#ffffff;" ><%=Eval("label")%></div>
+                                    </div>
+                                </pe:if>
+                            </div>
+                        </Columns>
+                    </pe:gridview>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</pe:mcml>
