@@ -14,6 +14,7 @@ NPL.load("(gl)script/ide/System/Windows/Window.lua");
 NPL.load("(gl)script/ide/System/os/run.lua");
 NPL.load("npl_mod/AutoUpdater/AssetsManager.lua");
 NPL.load("script/AppLauncher/main/TipsWindow.lua");
+NPL.load("script/AppLauncher/main/ActivationDialogWindow.lua");
 local Window = commonlib.gettable("System.Windows.Window")
 local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
 local AssetsManager = commonlib.gettable("Mod.AutoUpdater.AssetsManager");
@@ -258,4 +259,9 @@ function MainWindow.OnMovingFileCallback(dest, cur, total)
 
     local percent = 100 * cur / total
     MainWindow.ShowPercent(percent)
+end
+
+function MainWindow.OnActivation()
+    local ActivationDialogWindow = commonlib.gettable("AppLauncher.ActivationDialogWindow")
+    ActivationDialogWindow.ShowPage()
 end
