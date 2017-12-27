@@ -47,21 +47,21 @@ end
     <div style="padding:15px;background-color:#77777777">
         <div style="width:128px;height:15px;margin-top:10px;background:url(Texture/AppLauncherRes/keepwork_logo_32bits.png#0 0 128 15)"></div>
         <div align="right" style="margin-top:-15px;">
-            <input type="button" onclick="OnLogin()" style="float:left;width:101px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue_32bits.png:6 6 6 6)"/>
-            <input type="button" onclick="OnRegister()" style="float:left;margin-left:20px;width:101px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_black_32bits.png:6 6 6 6)"/>
+            <input type="button" value="登录" onclick="OnLogin()" style="float:left;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue1_32bits.png:6 6 6 6)"/>
+            <input type="button" value="注册" onclick="OnRegister()" style="float:left;margin-left:20px;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_black1_32bits.png:6 6 6 6)"/>
         </div>
     </div>
     <!--horizontal line-->
     <div width="100%" style="height:1px;background-color:#ffffff"/>
     <div >
-        <div style="float:left;width:200px;background-color:#111111dd" height="100%">
+        <div style="float:left;width:220px;background-color:#111111dd" height="100%">
             <div>
                 <pe:gridview DataSource="<%=GetDataSource %>" name="menuList"
                     CellPadding="0" ItemsPerLine="1" AllowPaging="false" pagesize="100">
                     <Columns>
                         <div>
                             <pe:if condition='<%=IsSelected(Eval("index"))%>' >
-                                <div width="100%" style="padding-left:10px;padding-top:7px;width:200px;height:50px;background:url(Texture/AppLauncherRes/newskin/underline_32bits.png:6 6 6 6)">
+                                <div width="100%" style="padding-left:10px;padding-top:7px;width:220px;height:48px;background:url(Texture/AppLauncherRes/newskin/underline_32bits.png:6 6 6 6)">
                                     <img width="36" height="36" src='<%=Eval("icon")%>'/>
                                     <div style="float:left;margin-left:5px;margin-top:10px;color:#ffffff;" ><%=Eval("label")%></div>
                                 </div>
@@ -133,17 +133,17 @@ end
             </pe:if>
             <div style="margin-top:-30px;">
                 <div>
-                    <input type="button" onclick="OnRun()" style="float:left;width:121px;height:61px;background:url(Texture/AppLauncherRes/newskin/btn_enter_32bits.png:6 6 6 6)"/>
-                    <input type="button" onclick="OnUpdate()" style="float:left;margin-left:10px;width:121px;height:61px;background:url(Texture/AppLauncherRes/newskin/btn_update_32bits.png:6 6 6 6)"></input>
+                    <input type="button" value="进入" onclick="OnRun()" style="float:left;width:122px;height:62px;background:url(Texture/AppLauncherRes/newskin/btn_enter_32bits.png:6 6 6 6)"/>
+                    <input type="button" value="更新" onclick="OnUpdate()" style="float:left;margin-left:10px;width:122px;height:62px;background:url(Texture/AppLauncherRes/newskin/btn_update_32bits.png:6 6 6 6)"></input>
                     <div style="float:left;padding-right:10px;">
-                        <div align="center" style="background:url(Texture/AppLauncherRes/newskin/frame_black_32bits.png:6 6 6 6)">
+                        <div align="center" style="background:url(Texture/AppLauncherRes/newskin/tips_text_bg_32bits.png:2 2 2 2)">
                             <div style="float:left;color:#ffffff">
-                                <pe:label name="state_txt" style="width:400px;height:25px;text-align:center;"/>
+                                <pe:label name="state_txt" style="width:400px;height:22px;text-align:center;"/>
                             </div>
                         </div>
 
-                        <div style="width:538px;height:21px;background:url(Texture/AppLauncherRes/newskin/progress_black_32bits.png:6 6 6 6)">
-                            <pe:progressbar name="progress_bar" width="100%" style="height:21px;" Minimum = "0" Maximum = "100" Value="75" blockimage="Texture/AppLauncherRes/newskin/progress_blue_32bits.png:6 6 6 6" background="" />
+                        <div align="center" width="100%" style="margin-left:10px;margin-right:10px;height:22px;background:url(Texture/AppLauncherRes/newskin/progress_black_32bits.png:6 6 6 6)">
+                            <pe:progressbar name="progress_bar" width="100%" style="height:22px;" Minimum = "0" Maximum = "100" Value="75" blockimage="Texture/AppLauncherRes/newskin/progress_blue_32bits.png:6 6 6 6" background="" />
                         </div>
 
                         <div align="right" style="color:#7d7d7d;font-size:12px;">
