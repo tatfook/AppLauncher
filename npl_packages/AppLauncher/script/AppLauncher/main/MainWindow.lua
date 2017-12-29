@@ -15,9 +15,13 @@ NPL.load("(gl)script/ide/System/os/run.lua");
 NPL.load("npl_mod/AutoUpdater/AssetsManager.lua");
 NPL.load("script/AppLauncher/main/TipsWindow.lua");
 NPL.load("script/AppLauncher/main/ActivationDialogWindow.lua");
+NPL.load("script/AppLauncher/main/AppUrlProtocolHandler.lua");
 local Window = commonlib.gettable("System.Windows.Window")
 local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
 local AssetsManager = commonlib.gettable("Mod.AutoUpdater.AssetsManager");
+local AppUrlProtocolHandler = commonlib.gettable("AppLauncher.AppUrlProtocolHandler");
+MainWindow.protocol_name = "test_app";
+MainWindow.protocol_exe_name = "AppLauncher_d.exe";
 MainWindow.selected_index = 1;
 MainWindow.cmdlines = {
     ["paracraft"] = [[single="true" noupdate="true" mc="true" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
@@ -262,6 +266,7 @@ function MainWindow.OnMovingFileCallback(dest, cur, total)
 end
 
 function MainWindow.OnActivation()
-    local ActivationDialogWindow = commonlib.gettable("AppLauncher.ActivationDialogWindow")
-    ActivationDialogWindow.ShowPage()
+    --local ActivationDialogWindow = commonlib.gettable("AppLauncher.ActivationDialogWindow")
+    --ActivationDialogWindow.ShowPage()
+	AppUrlProtocolHandler:CheckInstallUrlProtocol(MainWindow.protocol_name,MainWindow.protocol_exe_name)
 end
