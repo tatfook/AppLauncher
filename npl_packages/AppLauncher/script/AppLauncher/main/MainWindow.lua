@@ -40,9 +40,9 @@ MainWindow.menus = {
         window_bg = "newskin/background1_32bits.png",
         config_file = "script/AppLauncher/configs/paracraft.xml",
         pagename = "paracraft.html",
-        pagepath = "script/AppLauncher/pages/paracraft",
-        pageTempPath = "script/AppLauncher/pages/paracraft/temp",
-        pageurl = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/pages/paracraft/paracraft.html"
+        pagepath = "pages/",
+        pageTempPath = "temp/",
+        pageurl = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/pages/paracraft.html"
     },
     {
         id = "paracraft-haqi",
@@ -52,8 +52,10 @@ MainWindow.menus = {
         icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",
         window_bg = "",
         config_file = "script/AppLauncher/configs/haqi2.xml",
-        page = "script/AppLauncher/pages/paracraft/paracraft.html",
-        pageurl = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/pages/paracraft/paracraft.html"
+        pagename = "paracraft.html",
+        pagepath = "pages/",
+        pageTempPath = "temp/",
+        pageurl = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/pages/paracraft.html"
     },
     {
         id = "haqi",
@@ -63,6 +65,10 @@ MainWindow.menus = {
         icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",
         window_bg = "",
         config_file = "script/AppLauncher/configs/haqi.xml",
+        pagename = "paracraft.html",
+        pagepath = "pages/",
+        pageTempPath = "temp/",
+        pageurl = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/pages/paracraft.html"
     },
     {
         id = "haqi2",
@@ -72,6 +78,10 @@ MainWindow.menus = {
         icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",
         window_bg = "",
         config_file = "script/AppLauncher/configs/haqi2.xml",
+        pagename = "paracraft.html",
+        pagepath = "pages/",
+        pageTempPath = "temp/",
+        pageurl = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/pages/paracraft.html"
     },
     {
         id = "truckstar",
@@ -81,6 +91,10 @@ MainWindow.menus = {
         icon = "Texture/AppLauncherRes/truckstar_logo_32bits.png#0 0 36 36",
         window_bg = "truckstar/truckstar_window_bg_32bit.png",
         config_file = "script/AppLauncher/configs/truckstar.xml",
+        pagename = "paracraft.html",
+        pagepath = "pages/",
+        pageTempPath = "temp/",
+        pageurl = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/pages/paracraft.html"
     },
 }
 MainWindow.asset_managers = {};
@@ -313,20 +327,37 @@ function MainWindow.OnMovingFileCallback(dest, cur, total)
 end
 
 function MainWindow.OnActivation()
-    --local ActivationDialogWindow = commonlib.gettable("AppLauncher.ActivationDialogWindow")
-    --ActivationDialogWindow.ShowPage()
 	AppUrlProtocolHandler:CheckInstallUrlProtocol(MainWindow.protocol_name,MainWindow.protocol_exe_name)
 end
 
 function MainWindow.OnLoadAppPage(appIndex)
     MainWindow.LoadLocalAppPage(appIndex)
 
-    MainWindow.DowloadLatestAppPage(appIndex, function ()
+    MainWindow.DowloadLatestAppPage(appIndex, function (data)
         -- comparing the latest file and the local file
-        if not IsFilesSame(tempPath, writablePath) then
-            CopyFiles(tempPath, writablePath)
-            DeleteFiles(tempPath)
+        local pagepath = MainWindow.menus[appIndex].pagepath
+        local pageTempPath = MainWindow.menus[appIndex].pageTempPath
+        local pagename = MainWindow.menus[appIndex].pagename
+        local localFileName = pagepath .. "/" .. pagename
 
+        local isUpdate = false
+
+        ParaIO.CreateDirectory(pagepath)
+        local file = ParaIO.open(localFileName, "r")
+    	if file:IsValid() then
+    		local text = file:ReadBytes(-1, nil)
+            file:close()
+
+            if text ~= data then
+                isUpdate = true
+            end
+        else
+            LOG.std(nil, "debug", "AppLauncher", "can not open file %s", localFileName)
+            isUpdate = true
+        end
+
+        if isUpdate then
+            ParaIO.MoveFile(pageTempPath.."/"..pagename, localFileName)
             MainWindow.LoadLocalAppPage(appIndex)
         end
     end)
@@ -337,10 +368,12 @@ function MainWindow.LoadLocalAppPage(appIndex)
     local pagename = MainWindow.menus[appIndex].pagename
     local url = pagepath .. "/" .. pagename
 
+    local width, height = 500, 400
+
     local window = Window:new()
 	window:Show({
 		url = url,
-		alignment = "_ct", left = -100, top = -200, width = 500, height = 309,
+		alignment = "_ct", left = -280, top = -200, width = width, height = height,
 	})
 
     MainWindow.CurrentAppPage = window
@@ -349,6 +382,7 @@ end
 function MainWindow.DowloadLatestAppPage(appIndex, callback)
     local cfg = MainWindow.menus[appIndex]
     System.os.GetUrl(cfg.pageurl, function(err, msg, data)
+        LOG.std(nil, "debug", "AppLauncher", "MainWindow.DowloadLatestAppPage: System.os.GetUrl callback")
         if err == 200 then
             if data then
                 ParaIO.CreateDirectory(cfg.pageTempPath)
@@ -358,14 +392,15 @@ function MainWindow.DowloadLatestAppPage(appIndex, callback)
 					file:close()
 
                     if callback and type(callback) == "function" then
-                        callback()
+                        LOG.std(nil, "debug", "AppLauncher", "download latest app page finished. Calling the callback function")
+                        callback(data)
                     end
                 end
             else
-                LOG.std(nil, "debug", "AppLauncher", msg)
+                LOG.std(nil, "debug", "AppLauncher", "MainWindow.DowloadLatestAppPage: no data: %s", msg)
             end
         else
-            LOG.std(nil, "debug", "AppLauncher", msg)
+            LOG.std(nil, "debug", "AppLauncher", "MainWindow.DowloadLatestAppPage: error: %s, msg: %s", err, msg)
         end
     end)
 end
