@@ -20,18 +20,64 @@ local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
 local AssetsManager = commonlib.gettable("Mod.AutoUpdater.AssetsManager");
 MainWindow.selected_index = 1;
 MainWindow.cmdlines = {
-    ["paracraft"] = [[single="true" noupdate="true" mc="true" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
+    ["paracraft"] = [[single="true" noupdate="true" worlddir="../worlds" mc="true" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
     ["paracraft-haqi"] = [[single="true" noupdate="true" version="kids" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
     ["haqi"] = [[single="true" version="kids" noupdate="true" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
     ["haqi2"] = [[single="true" version="teen" noupdate="true" updateurl="http://update.61.com/haqi/coreupdate_teen/;http://teenver.paraengine.com/;http://teenver.pala5.cn/;"]],
     ["truckstar"] = [[]],
 }
 MainWindow.menus = {
-    { id = "paracraft",         folder = "paracraft",  executable="paraengineclient",   label = "Paracraft创意空间",    icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",   window_bg = "newskin/background1_32bits.png",  config_file = "script/AppLauncher/configs/paracraft.xml", },
-    { id = "paracraft-haqi",	folder = "paracraft",  executable="paraengineclient",	label = "Paracraft-魔法哈奇",   icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",   window_bg = "",  config_file = "script/AppLauncher/configs/haqi2.xml",	   },
-    { id = "haqi",		folder = "haqi",       executable="paraengineclient",	label = "魔法哈奇",             icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",	      window_bg = "",  config_file = "script/AppLauncher/configs/haqi.xml",	  },
-    { id = "haqi2",		folder = "haqi2",      executable="paraengineclient",	label = "魔法哈奇2",            icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",        window_bg = "",  config_file = "script/AppLauncher/configs/haqi2.xml",	   },
-    { id = "truckstar",		folder = "truckstar",  executable="Launcher",		label = "创意空间童趣版",        icon = "Texture/AppLauncherRes/truckstar_logo_32bits.png#0 0 36 36",   window_bg = "truckstar/truckstar_window_bg_32bit.png",  config_file = "script/AppLauncher/configs/truckstar.xml",	},
+    {
+        id = "paracraft",
+        folder = "paracraft",
+        executable="paraengineclient",
+        label = "Paracraft创意空间",
+        icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",
+        window_bg = "newskin/background1_32bits.png",
+        config_file = "script/AppLauncher/configs/paracraft.xml",
+        pagename = "paracraft.html",
+        pagepath = "script/AppLauncher/pages/paracraft",
+        pageTempPath = "script/AppLauncher/pages/paracraft/temp",
+        pageurl = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/pages/paracraft/paracraft.html"
+    },
+    {
+        id = "paracraft-haqi",
+        folder = "paracraft",
+        executable="paraengineclient",
+        label = "Paracraft-魔法哈奇",
+        icon = "Texture/AppLauncherRes/paracraft_logo_32bits.png#0 0 36 36",
+        window_bg = "",
+        config_file = "script/AppLauncher/configs/haqi2.xml",
+        page = "script/AppLauncher/pages/paracraft/paracraft.html",
+        pageurl = "https://raw.githubusercontent.com/tatfook/AppLauncher/master/npl_packages/AppLauncher/script/AppLauncher/pages/paracraft/paracraft.html"
+    },
+    {
+        id = "haqi",
+        folder = "haqi",
+        executable="paraengineclient",
+        label = "魔法哈奇",
+        icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",
+        window_bg = "",
+        config_file = "script/AppLauncher/configs/haqi.xml",
+    },
+    {
+        id = "haqi2",
+        folder = "haqi2",
+        executable="paraengineclient",
+        label = "魔法哈奇2",
+        icon = "Texture/AppLauncherRes/haqi_logo_32bits.png#0 0 36 36",
+        window_bg = "",
+        config_file = "script/AppLauncher/configs/haqi2.xml",
+    },
+    {
+        id = "truckstar",
+        folder = "truckstar",
+        executable="Launcher",
+        label = "创意空间童趣版",
+        icon = "Texture/AppLauncherRes/truckstar_logo_32bits.png#0 0 36 36",
+        window_bg = "truckstar/truckstar_window_bg_32bit.png",
+        config_file = "script/AppLauncher/configs/truckstar.xml",
+    },
 }
 MainWindow.asset_managers = {};
 
@@ -47,6 +93,7 @@ function MainWindow.OnClick(index)
     local node = MainWindow.GetSelectedNode();
     if(node)then
         MainWindow.OnCheck(node.id,node.folder,node.config_file)
+        MainWindow.OnLoadAppPage(index)
     end
     MainWindow.RefreshPage();
 end
@@ -264,4 +311,56 @@ end
 function MainWindow.OnActivation()
     local ActivationDialogWindow = commonlib.gettable("AppLauncher.ActivationDialogWindow")
     ActivationDialogWindow.ShowPage()
+end
+
+function MainWindow.OnLoadAppPage(appIndex)
+    MainWindow.LoadLocalAppPage(appIndex)
+
+    MainWindow.DowloadLatestAppPage(appIndex, function ()
+        -- comparing the latest file and the local file
+        if not IsFilesSame(tempPath, writablePath) then
+            CopyFiles(tempPath, writablePath)
+            DeleteFiles(tempPath)
+
+            MainWindow.LoadLocalAppPage(appIndex)
+        end
+    end)
+end
+
+function MainWindow.LoadLocalAppPage(appIndex)
+    local pagepath = MainWindow.menus[appIndex].pagepath
+    local pagename = MainWindow.menus[appIndex].pagename
+    local url = pagepath .. "/" .. pagename
+
+    local window = Window:new()
+	window:Show({
+		url = url,
+		alignment = "_ct", left = -100, top = -200, width = 500, height = 309,
+	})
+
+    MainWindow.CurrentAppPage = window
+end
+
+function MainWindow.DowloadLatestAppPage(appIndex, callback)
+    local cfg = MainWindow.menus[appIndex]
+    System.os.GetUrl(cfg.pageurl, function(err, msg, data)
+        if err == 200 then
+            if data then
+                ParaIO.CreateDirectory(cfg.pageTempPath)
+                local file = ParaIO.open(cfg.pageTempPath .. "/" .. cfg.pagename, "w")
+                if file:IsValid() then
+					file:write(data, #data)
+					file:close()
+
+                    if callback and type(callback) == "function" then
+                        callback()
+                    end
+                end
+            else
+                LOG.std(nil, "debug", "AppLauncher", msg)
+            end
+        else
+            LOG.std(nil, "debug", "AppLauncher", msg)
+        end
+    end)
 end
