@@ -1,6 +1,9 @@
 <pe:mcml>
     <script type="text/npl" src="MainWindow.lua">
 <![CDATA[
+NPL.load("script/AppLauncher/main/AppUrlProtocolHandler.lua");
+local AppUrlProtocolHandler = commonlib.gettable("AppLauncher.AppUrlProtocolHandler");
+
 NPL.load("script/AppLauncher/main/MainWindow.lua");
 local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
 MainWindow.OnInit();
@@ -25,6 +28,11 @@ function GetSelectedIndex()
 end
 function OnLogin()
     echo("============OnLogin");
+    NPL.load("script/AppLauncher/main/MessageWindow.lua");
+	local MessageWindow = commonlib.gettable("AppLauncher.MessageWindow");
+	MessageWindow.Show("hello message window MessageWindow.Buttons.YesNo",function(result)
+		commonlib.echo(result);
+    end,MessageWindow.Buttons.YesNo);
 end
 function OnRegister()
     echo("============OnRegister");
@@ -39,7 +47,9 @@ end
 function OnActivation()
     MainWindow.OnActivation()
 end
-
+function HasUrlProtocol()
+    return AppUrlProtocolHandler:HasUrlProtocol(MainWindow.protocol_name);
+end
 ]]></script>
 <!--<div>
     state:<input type="button" name="state_txt" value="none" />
@@ -51,7 +61,12 @@ end
 <div name="window_background" width="100%" height="100%" style="background:;">
     <div style="height:78px;padding:15px;background-color:#77777777">
         <div style="float:left;width:128px;height:16px;margin-top:10px;background:url(Texture/AppLauncherRes/keepwork_logo_32bits.png#0 0 128 16)"></div>
-        <input type="button" value="未激活" onclick="OnActivation()" style="float:left;margin-left:20px;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_black1_32bits.png:2 2 2 2)"/>
+        <pe:if condition="<%=HasUrlProtocol()%>">
+            <input type="button" value="已经激活" style="float:left;margin-left:20px;width:102px;height:40px;background:url(Texture/AppLauncherRes/newskin/btn_green_32bits.png#0 0 50 40:20 16 20 16)"/>
+        </pe:if>
+        <pe:if condition="<%=not HasUrlProtocol()%>">
+            <input type="button" value="激活" onclick="OnActivation()" style="float:left;margin-left:20px;width:102px;height:40px;background:url(Texture/AppLauncherRes/newskin/btn_gray_32bits.png#0 0 50 40:20 16 20 16)"/>
+        </pe:if>
         <div align="right" style="float:left;width:640px">
             <input type="button" value="登录" onclick="OnLogin()" style="float:left;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue1_32bits.png:2 2 2 2)"/>
             <input type="button" value="注册" onclick="OnRegister()" style="float:left;margin-left:20px;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_black1_32bits.png:2 2 2 2)"/>

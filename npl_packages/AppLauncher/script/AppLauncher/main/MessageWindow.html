@@ -1,0 +1,39 @@
+<pe:mcml>
+    <script type="text/npl" src="MessageWindow.lua">
+<![CDATA[
+NPL.load("script/AppLauncher/main/MessageWindow.lua");
+MessageWindow = commonlib.gettable("AppLauncher.MessageWindow");
+MessageWindow.OnInit();
+function GetInfo()  
+    return MessageWindow.info;
+end
+function DoAction(v)  
+    MessageWindow.DoAction(v)
+end
+]]></script>
+<style type="text/css">
+    .ok_btn {
+        width: 100px;
+        height: 40px;
+        background: Texture/AppLauncherRes/newskin/btn_green_32bits.png#0 0 50 40:20 16 20 16;
+    }
+    .cancel_btn {
+        width: 100px;
+        height: 40px;
+        background: Texture/AppLauncherRes/newskin/btn_gray_32bits.png#0 0 50 40:20 16 20 16;
+    }
+</style>
+<div width="100%" height="100%" style="background:url(Texture/AppLauncherRes/newskin/bg_round_32bits.png#0 0 99 96:44 38 44 38)">
+    <div width="100%" height="200px;" style="padding:20px;color:#ffffff;">
+        <%=GetInfo()%>
+    </div>
+    <pe:if condition='<%=MessageWindow.input_buttons == MessageWindow.Buttons.OK%>' >
+        <input type="button" value="确定" name='<%=MessageWindow.DialogResult.OK%>' onclick="DoAction()" style="float:left;margin-left:135px;" class="ok_btn"/>
+    </pe:if>
+    <pe:if condition='<%=MessageWindow.input_buttons == MessageWindow.Buttons.YesNo%>' >
+        <div style="margin-left:60px;">
+            <input type="button" value="确定" name='<%=MessageWindow.DialogResult.Yes%>' onclick="DoAction()" style="float:left;" class="ok_btn"/>
+            <input type="button" value="取消" name='<%=MessageWindow.DialogResult.No%>' onclick="DoAction()" style="float:left;margin-left:50px;" class="cancel_btn"/>
+        </div>
+    </pe:if>
+</div>
