@@ -14,6 +14,7 @@ NPL.load("(gl)script/ide/System/Windows/Window.lua");
 NPL.load("(gl)script/ide/System/os/run.lua");
 NPL.load("npl_mod/AutoUpdater/AssetsManager.lua");
 NPL.load("script/AppLauncher/main/TipsWindow.lua");
+NPL.load("script/AppLauncher/main/LoginWindow.lua")
 NPL.load("script/AppLauncher/main/ActivationDialogWindow.lua");
 NPL.load("script/AppLauncher/main/AppUrlProtocolHandler.lua");
 local Window = commonlib.gettable("System.Windows.Window")
@@ -397,10 +398,22 @@ function MainWindow.DowloadLatestAppPage(appIndex, callback)
                     end
                 end
             else
-                LOG.std(nil, "debug", "AppLauncher", "MainWindow.DowloadLatestAppPage: no data: %s", msg)
+                LOG.std(nil, "debug", "AppLauncher", "MainWindow.DowloadLatestAppPage: no data: %s", tostring(msg))
             end
         else
-            LOG.std(nil, "debug", "AppLauncher", "MainWindow.DowloadLatestAppPage: error: %s, msg: %s", err, msg)
+            LOG.std(nil, "debug", "AppLauncher", "MainWindow.DowloadLatestAppPage: error: %s, msg: %s", tostring(err), tostring(msg))
         end
     end)
+end
+
+function MainWindow.OnLogin()
+    local LoginWindow = commonlib.gettable("AppLauncher.LoginWindow")
+    LoginWindow.ShowPage()
+    --[[
+    NPL.load("script/AppLauncher/main/MessageWindow.lua");
+	local MessageWindow = commonlib.gettable("AppLauncher.MessageWindow");
+	MessageWindow.Show("hello message window MessageWindow.Buttons.YesNo",function(result)
+		commonlib.echo(result);
+    end,MessageWindow.Buttons.YesNo);
+    --]]
 end

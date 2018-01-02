@@ -1,0 +1,55 @@
+<pe:mcml>
+<script type="text/npl" src="LoginWindow.lua">
+<![CDATA[
+    NPL.load("script/AppLauncher/main/LoginWindow.lua");
+    local LoginWindow = commonlib.gettable("AppLauncher.LoginWindow");
+    LoginWindow.OnInit();
+
+    function Close()
+
+    end
+
+    function OnLogin()
+
+    end
+
+    function OnRegister()
+
+    end
+]]>
+</script>
+
+<div width="100%" height="100%" style="background:url(Texture/AppLauncherRes/newskin/bg_round_32bits.png#0 0 99 96:44 38 44 38)">
+    <div width="100%" height="84" style="margin-top:20px;padding:20px">
+        <div>
+            <div name="username_tips" style="float:left;color:#ffffff;font-size:18px;">
+                账号：
+            </div>
+            <input width="110" height="28" style="float:left;color:#2a3038"/>
+        </div>
+        <div style="margin-top:10px;">
+            <div name="username_tips" style="float:left;color:#ffffff;font-size:18px;">
+                密码：
+            </div>
+            <input width="110" height="28" style="float:left;color:#2a3038"/>
+        </div>
+    </div>
+    <div style="margin-top:10px">
+        <input type="checkbox" width="32" height="32" style="float:left;margin-left:20px" UncheckedBG="Texture/AppLauncherRes/newskin/checkbox_unselected_32bits.png" CheckedBG="Texture/AppLauncherRes/newskin/checkbox_selected_32bits.png"/>
+        <div style="float:left;margin-top:5px;color:#ffffff">
+            记住密码
+        </div>
+        <input type="checkbox" width="32" height="32" style="float:left;margin-left:20px" UncheckedBG="Texture/AppLauncherRes/newskin/checkbox_unselected_32bits.png" CheckedBG="Texture/AppLauncherRes/newskin/checkbox_selected_32bits.png"/>
+        <div style="float:left;margin-top:5px;color:#ffffff">
+            自动登录
+        </div>
+    </div>
+    <input type="button" value="登录" onclick="OnLogin()" align="center" style="float:left;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue_32bits.png#0 0 50 40:20 16 20 16)"/>
+    <div>
+        <div style="float:left;margin-left:50px;margin-top:5px;color:#ffffff">
+            还没有账号？
+        </div>
+        <input type="button" value="点击注册" onclick="OnRegister()" style="color:#ff4e00"/>
+    </div>
+</div>
+</pe:mcml>

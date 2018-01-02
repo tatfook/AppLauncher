@@ -28,11 +28,8 @@ function GetSelectedIndex()
 end
 function OnLogin()
     echo("============OnLogin");
-    NPL.load("script/AppLauncher/main/MessageWindow.lua");
-	local MessageWindow = commonlib.gettable("AppLauncher.MessageWindow");
-	MessageWindow.Show("hello message window MessageWindow.Buttons.YesNo",function(result)
-		commonlib.echo(result);
-    end,MessageWindow.Buttons.YesNo);
+
+    MainWindow.OnLogin()
 end
 function OnRegister()
     echo("============OnRegister");
