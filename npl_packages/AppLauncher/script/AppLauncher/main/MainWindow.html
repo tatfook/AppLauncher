@@ -68,9 +68,9 @@ end
             <input type="button" value="激活" onclick="OnActivation()" style="float:left;margin-left:20px;width:102px;height:40px;background:url(Texture/AppLauncherRes/newskin/btn_gray_32bits.png#0 0 50 40:20 16 20 16)"/>
         </pe:if>
         <div align="right" style="float:left;width:640px">
-            <input type="button" value="登录" onclick="OnLogin()" style="float:left;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue1_32bits.png:2 2 2 2)"/>
-            <input type="button" value="注册" onclick="OnRegister()" style="float:left;margin-left:20px;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_black1_32bits.png:2 2 2 2)"/>
-            <input type="button" value="中文" onclick="OnLanguage()" style="float:left;margin-left:40px;margin-top:10px;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue1_32bits.png:2 2 2 2)"/>
+            <input type="button" value="登录" onclick="OnLogin()" style="float:left;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue_32bits.png#0 0 50 40:20 16 20 16)"/>
+            <input type="button" value="注册" onclick="OnRegister()" style="float:left;margin-left:20px;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_gray_32bits.png#0 0 50 40:20 16 20 16)"/>
+            <input type="button" value="中文" onclick="OnLanguage()" style="float:left;margin-left:40px;margin-top:10px;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue_32bits.png#0 0 50 40:20 16 20 16)"/>
         </div>
     </div>
     <!--horizontal line-->
@@ -83,7 +83,7 @@ end
                     <Columns>
                         <div>
                             <pe:if condition='<%=IsSelected(Eval("index"))%>' >
-                                <div width="100%" style="padding-left:10px;padding-top:7px;width:220px;height:48px;background:url(Texture/AppLauncherRes/newskin/underline_32bits.png:6 6 6 6)">
+                                <div width="100%" style="padding-left:10px;padding-top:7px;width:220px;height:48px;background:url(Texture/AppLauncherRes/newskin/underline_32bits.png)">
                                     <img width="36" height="36" src='<%=Eval("icon")%>'/>
                                     <div style="float:left;margin-left:5px;margin-top:10px;color:#ffffff;" ><%=Eval("label")%></div>
                                 </div>
@@ -107,7 +107,7 @@ end
             <pe:if condition='<%=GetSelectedIndex() == 1%>'>
                 <div style="width:180px;height:86px;background:url(Texture/AppLauncherRes/paracraft_title_32bits.png#0 0 180 86)"/>
                 <div height="90%">
-                    
+
                 </div>
             </pe:if>
             <pe:if condition='<%=GetSelectedIndex() ~= 1%>'>
@@ -129,8 +129,8 @@ end
                             </div>
                         </div>
 
-                        <div align="center" width="100%" style="margin-left:10px;margin-right:10px;height:22px;background:url(Texture/AppLauncherRes/newskin/progress_black_32bits.png:6 6 6 6)">
-                            <pe:progressbar name="progress_bar" width="100%" style="height:22px;" Minimum = "0" Maximum = "100" Value="75" blockimage="Texture/AppLauncherRes/newskin/progress_blue_32bits.png:6 6 6 6" background="" />
+                        <div align="center" width="100%" style="margin-left:10px;margin-right:10px;height:32px;background:url(Texture/AppLauncherRes/newskin/progress_black_32bits.png#0 0 32 32:14 14 14 14)">
+                            <pe:progressbar name="progress_bar" width="100%" style="height:32px;" Minimum = "0" Maximum = "100" Value="75" blockimage="Texture/AppLauncherRes/newskin/progress_blue_32bits.png#0 0 32 32:14 14 14 14" background="" />
                         </div>
 
                         <div align="right" style="color:#7d7d7d;font-size:12px;">
