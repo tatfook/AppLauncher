@@ -365,19 +365,13 @@ function MainWindow.OnLoadAppPage(appIndex)
 end
 
 function MainWindow.LoadLocalAppPage(appIndex)
-    local pagepath = MainWindow.menus[appIndex].pagepath
-    local pagename = MainWindow.menus[appIndex].pagename
-    local url = pagepath .. "/" .. pagename
-
-    local width, height = 500, 400
-
-    local window = Window:new()
-	window:Show({
-		url = url,
-		alignment = "_ct", left = -280, top = -200, width = width, height = height,
-	})
-
-    MainWindow.CurrentAppPage = window
+    local frame = MainWindow.page:GetNode("AppPage")
+    if frame then
+        local pagepath = MainWindow.menus[appIndex].pagepath
+        local pagename = MainWindow.menus[appIndex].pagename
+        local url = pagepath .. "/" .. pagename
+        frame:SetAttribute("src", url)
+    end
 end
 
 function MainWindow.DowloadLatestAppPage(appIndex, callback)
