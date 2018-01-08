@@ -32,7 +32,8 @@ function OnLogin()
     MainWindow.OnLogin()
 end
 function OnRegister()
-    echo("============OnRegister");
+    echo("============OnRegister")
+    MainWindow.OnRegister()
 end
 function OnUpdate()
     MainWindow.OnUpdate();
@@ -46,6 +47,15 @@ function OnActivation()
 end
 function HasUrlProtocol()
     return AppUrlProtocolHandler:HasUrlProtocol(MainWindow.protocol_name);
+end
+function IsLoginSuccess()
+    return MainWindow.IsLoginSuccess()
+end
+function GetUsername()
+    return MainWindow.GetUsername()
+end
+function OnUserInfo()
+    return MainWindow.OnUserInfo()
 end
 ]]></script>
 <!--<div>
@@ -65,8 +75,13 @@ end
             <input type="button" value="激活" onclick="OnActivation()" style="float:left;margin-left:20px;width:102px;height:40px;background:url(Texture/AppLauncherRes/newskin/btn_gray_32bits.png#0 0 50 40:20 16 20 16)"/>
         </pe:if>
         <div align="right" style="float:left;width:640px">
-            <input type="button" value="登录" onclick="OnLogin()" style="float:left;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue_32bits.png#0 0 50 40:20 16 20 16)"/>
-            <input type="button" value="注册" onclick="OnRegister()" style="float:left;margin-left:20px;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_gray_32bits.png#0 0 50 40:20 16 20 16)"/>
+            <pe:if condition="<%=not IsLoginSuccess()%>">
+                <input type="button" value="登录" onclick="OnLogin()" style="float:left;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue_32bits.png#0 0 50 40:20 16 20 16)"/>
+                <input type="button" value="注册" onclick="OnRegister()" style="float:left;margin-left:20px;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_gray_32bits.png#0 0 50 40:20 16 20 16)"/>
+            </pe:if>
+            <pe:if condition="<%=IsLoginSuccess()%>">
+                <input type="button" value="<%=GetUsername()%>" onclick="OnUserInfo()" style="float:left;margin-left:20px;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_gray_32bits.png#0 0 50 40:20 16 20 16)"/>
+            </pe:if>
             <input type="button" value="中文" onclick="OnLanguage()" style="float:left;margin-left:40px;margin-top:10px;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue_32bits.png#0 0 50 40:20 16 20 16)"/>
         </div>
     </div>

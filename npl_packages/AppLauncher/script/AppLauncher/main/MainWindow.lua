@@ -411,3 +411,21 @@ function MainWindow.OnLogin()
     end,MessageWindow.Buttons.YesNo);
     --]]
 end
+
+function MainWindow.OnRegister()
+    local url = "http://keepwork.com/wiki/join"
+    ParaGlobal.ShellExecute("open", "iexplore.exe", url, "", 1)
+end
+
+function MainWindow.OnLoginSuccess(username)
+    MainWindow.LoginSuccess = true
+    MainWindow.Username = username
+end
+
+function MainWindow.IsLoginSuccess()
+    return MainWindow.LoginSuccess
+end
+
+function MainWindow.GetUsername()
+    return MainWindow.Username
+end
