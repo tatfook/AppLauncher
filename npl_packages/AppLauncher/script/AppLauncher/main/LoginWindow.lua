@@ -3,18 +3,33 @@ NPL.load("script/AppLauncher/main/MessageWindow.lua")
 local MessageWindow = commonlib.gettable("AppLauncher.MessageWindow")
 local MainWindow = commonlib.gettable("AppLauncher.MainWindow")
 
-local LoginWindow = commonlib.gettable("AppLauncher.LoginWindow")
+NPL.load("script/AppLauncher/main/Utils.lua")
+local Utils = commonlib.gettable("AppLauncher.Utils")
 
-LoginWindow.client_id = "1000003"
+local LoginWindow = commonlib.gettable("AppLauncher.LoginWindow")
 
 function LoginWindow.OnInit()
     LoginWindow.page = document:GetPageCtrl()
 
-    LoginWindow.IsSavePassword = false
-    LoginWindow.IsAutoLogin = false
+    LoginWindow.IsSavePassword = Utils.IsSavePassword()
+    LoginWindow.IsAutoLogin = Utils.IsAutoLogin()
 
-    LoginWindow.Username = ""
-    LoginWindow.Password = ""
+    LOG.std(nil, "debug", "AppLauncher", string.format("Utils.IsSavePassword() --> %s", LoginWindow.IsSavePassword and "yes" or "no"))
+    LOG.std(nil, "debug", "AppLauncher", string.format("Utils.IsAutoLogin() --> %s", LoginWindow.IsAutoLogin and "yes" or "no"))
+
+    LoginWindow.SetCheckSavePassword(LoginWindow.IsSavePassword)
+    LoginWindow.SetCheckAutoLogin(LoginWindow.IsAutoLogin)
+
+    if LoginWindow.IsSavePassword then
+        LoginWindow.Username = Utils.GetUserName()
+        LoginWindow.Password = Utils.GetPassword()
+
+        LoginWindow.SetUsernameToInput(LoginWindow.Username)
+        LoginWindow.SetPasswordToInput(LoginWindow.Password)
+    else
+        LoginWindow.Username = ""
+        LoginWindow.Password = ""
+    end
 end
 
 function LoginWindow.ShowPage()
@@ -32,9 +47,15 @@ function LoginWindow.ShowPage()
 
 end
 
+function LoginWindow.RefreshPage()
+    if LoginWindow.page then
+        LoginWindow.page:Refresh(0)
+    end
+end
+
 function LoginWindow.Close()
     if LoginWindow.window then
-        LoginWindow.window.CloseWindow(true)
+        LoginWindow.window:CloseWindow(true)
         LoginWindow.window = nil
     end
 end
@@ -52,93 +73,13 @@ function LoginWindow.OnLogin()
     local password = LoginWindow.GetPasswordFromInput()
     LOG.std(nil, "debug", "AppLauncher", "username: %s, password: %s", username, password)
 
-    if string.len(username) == 0 then
-        MessageWindow.Show(L"账号不能为空!", nil, MessageWindow.Buttons.OK)
-		return
-    end
-
-    if string.len(password) == 0 then
-        MessageWindow.Show(L"密码不能为空!", nil, MessageWindow.Buttons.OK)
-		return
-    end
-
-    local url = "http://keepwork.com/api/wiki/models/user/login"
-    System.os.GetUrl({
-        url = url,
-        json = true,
-        form = {
-            username = username,
-		    password = password,
-        }
-    }, function(err, msg, data)
-		LOG.std(nil, "debug", "keepwork login err", err)
-		LOG.std(nil, "debug", "keepwork login msg", msg)
-		LOG.std(nil, "debug", "keepwork login data", data)
-
-        if err and err == 503 then
-            MessageWindow.Show(L"keepwork正在维护中，我们马上回来", nil, MessageWindow.Buttons.OK)
-            return
-        end
-
-        if data and data.data and data.data.token then
-            local token = data.data.token
-            local username = data.data.userinfo.username
-		    LOG.std(nil, "debug", "keepwork login username", username)
-		    LOG.std(nil, "debug", "keepwork login token", token)
-
-            LoginWindow.Username = username
-            LoginWindow.Password = password
-
-            LoginWindow.AgreeOauth(username, LoginWindow.client_id, token)
-            return
-        end
-
-        if data and data.error then
-            MessageWindow.Show(data.error.message, nil, MessageWindow.Buttons.OK)
-            return
-        end
-    end)
-end
-
-function LoginWindow.AgreeOauth(username, clientID, token)
-    local url = "http://keepwork.com/api/wiki/models/oauth_app/agreeOauth";
-    System.os.GetUrl({
-        url = url,
-        json = true,
-        form = {
-            username = username,
-		    client_id = clientID,
-        },
-        headers = {
-            ["Authorization"] = " Bearer " .. token,
-        },
-    }, function(err, msg, data)
-		LOG.std(nil, "debug", "keepwork agreeOauth err", err);
-		LOG.std(nil, "debug", "keepwork agreeOauth msg", msg);
-		LOG.std(nil, "debug", "keepwork agreeOauth data", data);
-        if err and err == 503 then
-            MessageWindow.Show(L"keepwork正在维护中，我们马上回来", nil, MessageWindow.Buttons.OK)
-            return
-        end
-
-        if data and data.data and data.data.code then
-            local code = data.data.code;
-		    LOG.std(nil, "debug", "keepwork agreeOauth code", code);
+    Utils.Login(username, password, function (isSuccess)
+        if isSuccess then
             LoginWindow.Close()
-            if LoginWindow.IsSavePassword then
-                LoginWindow.SaveLocalData(username, LoginWindow.Password)
-            else
-                LoginWindow.SaveLocalData(username, nil)
-            end
 
-            LoginWindow.SaveLocalData("IsAutoLogin", LoginWindow.IsAutoLogin)
+            LoginWindow.SavePassword()
 
             MainWindow.OnLoginSuccess(username)
-            return
-        end
-
-        if data and data.error then
-            MessageWindow.Show(data.error.message, nil, MessageWindow.Buttons.OK)
         end
     end)
 end
@@ -154,6 +95,15 @@ function LoginWindow.GetUsernameFromInput()
     return ""
 end
 
+function LoginWindow.SetUsernameToInput(username)
+    if LoginWindow.page then
+        local input = LoginWindow.page:GetNode("username_input")
+        if input then
+            input:SetUIValue(username)
+        end
+    end
+end
+
 function LoginWindow.GetPasswordFromInput()
     if LoginWindow.page then
         local input = LoginWindow.page:GetNode("password_input")
@@ -165,20 +115,54 @@ function LoginWindow.GetPasswordFromInput()
     return ""
 end
 
+function LoginWindow.SetPasswordToInput(password)
+    if LoginWindow.page then
+        local input = LoginWindow.page:GetNode("username_input")
+        if input then
+            input:SetUIValue(password)
+        end
+    end
+end
+
 function LoginWindow.OnCheckSavePassword()
     if LoginWindow.page then
         local checkbox = LoginWindow.page:GetNode("checkbox_savepassword")
-        LoginWindow.IsSavePassword = checkbox:isChecked()
+        LoginWindow.IsSavePassword = checkbox:GetControl():isChecked()
+        LOG.std(nil, "debug", "AppLauncher", string.format("Save password? %s", LoginWindow.IsSavePassword and "yes" or "no"))
+
+        LoginWindow.SavePassword()
+    end
+end
+
+function LoginWindow.SetCheckSavePassword(isCheck)
+    if LoginWindow.page then
+        local checkbox = LoginWindow.page:GetNode("checkbox_savepassword")
+        LOG.std(nil, "debug", "AppLauncher", string.format("LoginWindow.SetCheckSavePassword(%s)", isCheck and "true" or "false"))
+        checkbox:setChecked(isCheck)
     end
 end
 
 function LoginWindow.OnCheckAutoLogin()
     if LoginWindow.page then
         local checkbox = LoginWindow.page:GetNode("checkbox_autologin")
-        LoginWindow.IsAutoLogin = checkbox:isChecked()
+        LoginWindow.IsAutoLogin = checkbox:GetControl():isChecked()
+        LOG.std(nil, "debug", "AppLauncher", string.format("Auto login? %s", LoginWindow.IsAutoLogin and "yes" or "no"))
+
+        Utils.SaveIsAutoLogin(LoginWindow.IsAutoLogin)
     end
 end
 
-function LoginWindow.SaveLocalData(key, value)
+function LoginWindow.SetCheckAutoLogin(isCheck)
+    if LoginWindow.page then
+        local checkbox = LoginWindow.page:GetNode("checkbox_autologin")
+        checkbox:setChecked(isCheck)
+    end
+end
 
+function LoginWindow.SavePassword()
+    if LoginWindow.IsSavePassword then
+        Utils.SaveUserInfo(LoginWindow.GetUsernameFromInput(), LoginWindow.GetPasswordFromInput())
+    else
+        Utils.SaveUserInfo(nil, nil)
+    end
 end

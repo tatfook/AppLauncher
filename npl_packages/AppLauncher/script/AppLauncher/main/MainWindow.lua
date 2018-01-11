@@ -17,6 +17,8 @@ NPL.load("script/AppLauncher/main/TipsWindow.lua");
 NPL.load("script/AppLauncher/main/LoginWindow.lua")
 NPL.load("script/AppLauncher/main/ActivationDialogWindow.lua");
 NPL.load("script/AppLauncher/main/AppUrlProtocolHandler.lua");
+NPL.load("script/AppLauncher/main/Utils.lua")
+local Utils = commonlib.gettable("AppLauncher.Utils")
 local Window = commonlib.gettable("System.Windows.Window")
 local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
 local AssetsManager = commonlib.gettable("Mod.AutoUpdater.AssetsManager");
@@ -104,6 +106,8 @@ MainWindow.IsUpdating = false
 
 function MainWindow.OnInit()
     MainWindow.page = document:GetPageCtrl();
+
+    MainWindow.CheckAutoLogin()
 end
 function MainWindow.OnClick(index)
 	if MainWindow.IsUpdating then return end
@@ -420,6 +424,8 @@ end
 function MainWindow.OnLoginSuccess(username)
     MainWindow.LoginSuccess = true
     MainWindow.Username = username
+
+    MainWindow.RefreshPage()
 end
 
 function MainWindow.IsLoginSuccess()
@@ -428,4 +434,21 @@ end
 
 function MainWindow.GetUsername()
     return MainWindow.Username
+end
+
+function MainWindow.CheckAutoLogin()
+    if Utils.IsAutoLogin() then
+        local username = Utils.GetUserName()
+        local password = Utils.GetPassword()
+        LOG.std(nil, "debug", "AppLauncher", string.format("MainWindow.CheckAutoLogin(): username '%s', password '%s'", username, password))
+        if #username > 0 and #password > 0 then
+            Utils.Login(username, password, function (isSuccess)
+                if isSuccess then
+                    MainWindow.OnLoginSuccess(username)
+                end
+            end)
+        end
+    else
+        LOG.std(nil, "debug", "AppLauncher", "MainWindow.CheckAutoLogin(): not auto login")
+    end
 end
