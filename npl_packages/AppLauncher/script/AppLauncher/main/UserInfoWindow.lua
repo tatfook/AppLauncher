@@ -39,11 +39,13 @@ function UserInfoWindow.GetUserName()
 end
 
 function UserInfoWindow.OnHome()
-
+    local url = "http://keepwork.com/"..UserInfoWindow.UserName
+    ParaGlobal.ShellExecute("open", "iexplore.exe", url, "", 1)
 end
 
 function UserInfoWindow.OnSetting()
-
+    local url = "http://keepwork.com/wiki/user_center"
+    ParaGlobal.ShellExecute("open", "iexplore.exe", url, "", 1)
 end
 
 function UserInfoWindow.OnLogout()
