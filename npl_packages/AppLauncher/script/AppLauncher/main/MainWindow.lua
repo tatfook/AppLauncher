@@ -430,6 +430,13 @@ function MainWindow.OnLoginSuccess(username)
     MainWindow.RefreshPage()
 end
 
+function MainWindow.OnLogoutSuccess()
+    MainWindow.LoginSuccess = false
+    MainWindow.Username = ""
+
+    MainWindow.RefreshPage()
+end
+
 function MainWindow.IsLoginSuccess()
     return MainWindow.LoginSuccess
 end

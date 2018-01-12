@@ -10,6 +10,13 @@ function Utils.SaveUserInfo(username, password)
     Utils.SaveLocalData("KeepWork_Local_UserInfo_Data", local_data, true)
 end
 
+function Utils.ClearUserInfo()
+    local local_data = Utils.LoadLocalData("KeepWork_Local_UserInfo_Data", {}, true)
+    local_data.username = nil
+    local_data.password = nil
+    Utils.SaveLocalData("KeepWork_Local_UserInfo_Data", local_data, true)
+end
+
 function Utils.GetUserName()
     local local_data = Utils.LoadLocalData("KeepWork_Local_UserInfo_Data", {}, true)
     return local_data.username or ""
@@ -21,12 +28,7 @@ function Utils.GetPassword()
 end
 
 function Utils.IsSavePassword()
-    local local_data = Utils.LoadLocalData("KeepWork_Local_UserInfo_Data", {}, true)
-    if local_data.password == nil or #local_data.password == 0 then
-        return false
-    else
-        return true
-    end
+    return string.len(Utils.GetPassword()) > 0
 end
 
 function Utils.SaveIsAutoLogin(isAutoLogin)
@@ -38,6 +40,12 @@ end
 function Utils.IsAutoLogin()
     local local_data = Utils.LoadLocalData("KeepWork_Local_UserInfo_Data", {}, true)
     return local_data.isAutoLogin
+end
+
+function Utils.ClearAutoLogin()
+    local local_data = Utils.LoadLocalData("KeepWork_Local_UserInfo_Data", {}, true)
+    local_data.isAutoLogin = nil
+    Utils.SaveLocalData("KeepWork_Local_UserInfo_Data", local_data, true)
 end
 
 function Utils.LoadLocalData(name, default_value, bIsGlobal)
@@ -193,4 +201,31 @@ function Utils.AgreeOauth(username, clientID, token, callback)
             end
         end
     end)
+end
+
+function Utils.Logout(callback)
+    Utils.ClearToken()
+    Utils.ClearUserInfo()
+    Utils.ClearAutoLogin()
+
+    if type(callback) == "function" then
+        callback()
+    end
+end
+
+function Utils.SaveToken(token)
+    local local_data = Utils.LoadLocalData("KeepWork_Local_UserInfo_Data", {}, true)
+    local_data.token = token
+    Utils.SaveLocalData("KeepWork_Local_UserInfo_Data", local_data, true)
+end
+
+function Utils.GetToken()
+    local local_data = Utils.LoadLocalData("KeepWork_Local_UserInfo_Data", {}, true)
+    return local_data.token or ""
+end
+
+function Utils.ClearToken()
+    local local_data = Utils.LoadLocalData("KeepWork_Local_UserInfo_Data", {}, true)
+    local_data.token = nil
+    Utils.SaveLocalData("KeepWork_Local_UserInfo_Data", local_data, true)
 end

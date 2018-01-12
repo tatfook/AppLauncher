@@ -1,5 +1,9 @@
 local Window = commonlib.gettable("System.Windows.Window")
 
+NPL.load("script/AppLauncher/main/Utils.lua")
+local Utils = commonlib.gettable("AppLauncher.Utils")
+local MainWindow = commonlib.gettable("AppLauncher.MainWindow")
+
 local UserInfoWindow = commonlib.gettable("AppLauncher.UserInfoWindow")
 
 function UserInfoWindow.OnInit()
@@ -23,6 +27,13 @@ function UserInfoWindow.ShowPage(username)
 
 end
 
+function UserInfoWindow.Close()
+    if UserInfoWindow.window then
+        UserInfoWindow.window:CloseWindow(true)
+        UserInfoWindow.window = nil
+    end
+end
+
 function UserInfoWindow.GetUserName()
     return UserInfoWindow.UserName
 end
@@ -36,5 +47,8 @@ function UserInfoWindow.OnSetting()
 end
 
 function UserInfoWindow.OnLogout()
-
+    Utils.Logout(function ()
+        UserInfoWindow.Close()
+        MainWindow.OnLogoutSuccess()
+    end)
 end
