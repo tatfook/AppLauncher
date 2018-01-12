@@ -18,6 +18,8 @@ NPL.load("script/AppLauncher/main/LoginWindow.lua")
 NPL.load("script/AppLauncher/main/ActivationDialogWindow.lua");
 NPL.load("script/AppLauncher/main/AppUrlProtocolHandler.lua");
 NPL.load("script/AppLauncher/main/Utils.lua")
+NPL.load("script/AppLauncher/main/UserInfoWindow.lua");
+local UserInfoWindow = commonlib.gettable("AppLauncher.UserInfoWindow")
 local Utils = commonlib.gettable("AppLauncher.Utils")
 local Window = commonlib.gettable("System.Windows.Window")
 local MainWindow = commonlib.gettable("AppLauncher.MainWindow");
@@ -451,4 +453,8 @@ function MainWindow.CheckAutoLogin()
     else
         LOG.std(nil, "debug", "AppLauncher", "MainWindow.CheckAutoLogin(): not auto login")
     end
+end
+
+function MainWindow.OnUserInfo()
+    UserInfoWindow.ShowPage(MainWindow.Username)
 end

@@ -1,0 +1,34 @@
+<pe:mcml>
+<script type="text/npl" src="UserInfoWindow.lua">
+<![CDATA[
+    NPL.load("script/AppLauncher/main/UserInfoWindow.lua");
+    local UserInfoWindow = commonlib.gettable("AppLauncher.UserInfoWindow");
+    UserInfoWindow.OnInit()
+
+    function GetUserName()
+        return UserInfoWindow.GetUserName()
+    end
+
+    function OnHome()
+        UserInfoWindow.OnHome()
+    end
+
+    function OnSetting()
+        UserInfoWindow.OnSetting()
+    end
+
+    function OnLogout()
+        UserInfoWindow.OnLogout()
+    end
+]]>
+</script>
+
+<div width="100%" height="100%" style="background:url(Texture/AppLauncherRes/newskin/bg_round_32bits.png#0 0 99 96:44 38 44 38)">
+    <div align="center" style="margin-top:18px;font-size:20px;color:#ffffff" >
+        <%=GetUserName()%>
+    </div>
+    <input type="button" value="我的主页" align="center" onclick="OnHome()" style="width:130px;height:38px;margin-top:10px;background:url(Texture/AppLauncherRes/newskin/btn_blue_32bits.png#0 0 50 40:20 16 20 16)"/>
+    <input type="button" value="设置中心" align="center" onclick="OnSetting()" style="width:130px;height:38px;margin-top:8px;background:url(Texture/AppLauncherRes/newskin/btn_blue_32bits.png#0 0 50 40:20 16 20 16)"/>
+    <input type="button" value="退出登录" align="center" onclick="OnLogout()" style="width:130px;height:38px;margin-top:8px;background:url(Texture/AppLauncherRes/newskin/btn_gray_32bits.png#0 0 50 40:20 16 20 16)"/>
+</div>
+</pe:mcml>
