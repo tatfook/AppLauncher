@@ -19,6 +19,8 @@ NPL.load("script/AppLauncher/main/ActivationDialogWindow.lua");
 NPL.load("script/AppLauncher/main/AppUrlProtocolHandler.lua");
 NPL.load("script/AppLauncher/main/Utils.lua")
 NPL.load("script/AppLauncher/main/UserInfoWindow.lua");
+NPL.load("script/AppLauncher/main/Translation.lua")
+local Translation = commonlib.gettable("AppLauncher.Translation")
 local UserInfoWindow = commonlib.gettable("AppLauncher.UserInfoWindow")
 local Utils = commonlib.gettable("AppLauncher.Utils")
 local Window = commonlib.gettable("System.Windows.Window")
@@ -109,7 +111,10 @@ MainWindow.IsUpdating = false
 function MainWindow.OnInit()
     MainWindow.page = document:GetPageCtrl();
 
+    MainWindow.UpdateLanguage()
     MainWindow.CheckAutoLogin()
+
+    MainWindow.RefreshPage()
 end
 function MainWindow.OnClick(index)
 	if MainWindow.IsUpdating then return end
@@ -185,7 +190,7 @@ function MainWindow.OnUpdate()
             a:download();
 			MainWindow.IsUpdating = true
         else
-            MainWindow.ShowState("已经最最新版，不需要在更新");
+            MainWindow.ShowState(L"已经最最新版，不需要在更新");
         end
     end
 end
@@ -214,25 +219,25 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
             a:onInit(redist_root,config_file,function(state)
                 if(state)then
                     if(state == AssetsManager.State.PREDOWNLOAD_VERSION)then
-                        MainWindow.ShowState("准备下载版本号");
+                        MainWindow.ShowState(L"准备下载版本号");
                     elseif(state == AssetsManager.State.DOWNLOADING_VERSION)then
-                        MainWindow.ShowState("下载版本号");
+                        MainWindow.ShowState(L"下载版本号");
                     elseif(state == AssetsManager.State.VERSION_CHECKED)then
-                        MainWindow.ShowState("检测版本号");
+                        MainWindow.ShowState(L"检测版本号");
                     elseif(state == AssetsManager.State.VERSION_ERROR)then
-                        MainWindow.ShowState("版本号错误");
+                        MainWindow.ShowState(L"版本号错误");
 						MainWindow.IsUpdating = false
                     elseif(state == AssetsManager.State.PREDOWNLOAD_MANIFEST)then
-                        MainWindow.ShowState("准备下载文件列表");
+                        MainWindow.ShowState(L"准备下载文件列表");
                     elseif(state == AssetsManager.State.DOWNLOADING_MANIFEST)then
-                        MainWindow.ShowState("下载文件列表");
+                        MainWindow.ShowState(L"下载文件列表");
                     elseif(state == AssetsManager.State.MANIFEST_DOWNLOADED)then
-                        MainWindow.ShowState("下载文件列表完成");
+                        MainWindow.ShowState(L"下载文件列表完成");
                     elseif(state == AssetsManager.State.MANIFEST_ERROR)then
-                        MainWindow.ShowState("下载文件列表错误");
+                        MainWindow.ShowState(L"下载文件列表错误");
 						MainWindow.IsUpdating = false
                     elseif(state == AssetsManager.State.PREDOWNLOAD_ASSETS)then
-                        MainWindow.ShowState("准备下载资源文件");
+                        MainWindow.ShowState(L"准备下载资源文件");
 
                         local nowTime = 0
                         local lastTime = 0
@@ -260,7 +265,7 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
                         timer:Change(0, interval)
                     elseif(state == AssetsManager.State.DOWNLOADING_ASSETS)then
                     elseif(state == AssetsManager.State.ASSETS_DOWNLOADED)then
-                        MainWindow.ShowState("下载资源文件结束");
+                        MainWindow.ShowState(L"下载资源文件结束");
                         local p = a:getPercent();
                         p = math.floor(p * 100);
                         MainWindow.ShowPercent(p);
@@ -270,18 +275,18 @@ function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
                         end
                         a:apply();
                     elseif(state == AssetsManager.State.ASSETS_ERROR)then
-                        MainWindow.ShowState("下载资源文件错误");
+                        MainWindow.ShowState(L"下载资源文件错误");
 						MainWindow.IsUpdating = false
                     elseif(state == AssetsManager.State.PREUPDATE)then
-                        MainWindow.ShowState("准备更新");
+                        MainWindow.ShowState(L"准备更新");
                     elseif(state == AssetsManager.State.UPDATING)then
-                        MainWindow.ShowState("更新中");
+                        MainWindow.ShowState(L"更新中");
                     elseif(state == AssetsManager.State.UPDATED)then
                         LOG.std(nil, "debug", "AppLauncher", "更新完成")
-                        MainWindow.ShowState("更新完成");
+                        MainWindow.ShowState(L"更新完成");
 						MainWindow.IsUpdating = false
                     elseif(state == AssetsManager.State.FAIL_TO_UPDATED)then
-                        MainWindow.ShowState("更新错误");
+                        MainWindow.ShowState(L"更新错误");
 						MainWindow.IsUpdating = false
                     end
                 end
@@ -464,4 +469,47 @@ end
 
 function MainWindow.OnUserInfo()
     UserInfoWindow.ShowPage(MainWindow.Username)
+end
+
+function MainWindow.OnLanguage()
+    local lan = Translation.GetCurrentLanguage()
+    if lan == "enUS" then
+        Translation.SetCurrentLanguage("zhCN")
+    else
+        Translation.SetCurrentLanguage("enUS")
+    end
+
+    MainWindow.UpdateLanguage()
+    MainWindow.RefreshPage()
+end
+
+function MainWindow.GetLanguage()
+    local lan = Translation.GetCurrentLanguage()
+    if lan == "enUS" then
+        return "English"
+    else
+        return "中文"
+    end
+end
+
+function MainWindow.UpdateLanguage()
+    LOG.std(nil, "debug", "AppLauncher", string.format("current language: %s", Translation.GetCurrentLanguage()))
+
+    local button_login = MainWindow.page:GetNode("button_login")
+    button_login:SetValue(L"登录")
+
+    local button_register = MainWindow.page:GetNode("button_register")
+    button_register:SetValue(L"注册")
+
+    local button_activated = MainWindow.page:GetNode("button_activated")
+    button_activated:SetValue(L"已经激活")
+
+    local button_activate = MainWindow.page:GetNode("button_activate")
+    button_activate:SetValue(L"激活")
+
+    local button_enter = MainWindow.page:GetNode("button_enter")
+    button_enter:SetValue(L"进入")
+
+    local button_update = MainWindow.page:GetNode("button_update")
+    button_update:SetValue(L"更新")
 end

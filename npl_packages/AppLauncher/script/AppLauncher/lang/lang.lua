@@ -6,12 +6,18 @@ NPL.load("(gl)script/AppLauncher/lang/lang.lua");
 -------------------------------------------------------
 ]]
 -- One can set a different language other than the default one in the application command line.
+--[[
 local lang = ParaEngine.GetAppCommandLineByParam("lang", nil);
 if(lang~=nil) then
 	if(lang=="enUS" or lang=="zhCN") then
 		ParaEngine.SetLocale(lang);
-	end	
+	end
 end
+--]]
+NPL.load("script/AppLauncher/main/Translation.lua")
+local Translation = commonlib.gettable("AppLauncher.Translation")
+
+ParaEngine.SetLocale(Translation.GetSystemLanguage())
 
 NPL.load("(gl)script/ide/Locale.lua");
 CommonCtrl.Locale.AutoLoadFile("script/AppLauncher/lang/AppLauncher-zhCN.lua");
