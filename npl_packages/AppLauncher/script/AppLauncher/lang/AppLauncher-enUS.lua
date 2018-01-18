@@ -30,5 +30,10 @@ L:RegisterTranslations("enUS", function() return {
     ["激活"] = "Activate"
     ["进入"] = "Enter",
     ["更新"] = "Update",
+    ["账号："] = "Account: ",
+    ["密码："] = "Password: ",
+    ["记住密码"] = "Remember password",
+    ["自动登录"] = "Autologin",
+    ["还没有账号？"] = "No account?",
 }
 end)

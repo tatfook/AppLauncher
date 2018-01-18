@@ -30,6 +30,9 @@ function LoginWindow.OnInit()
         LoginWindow.Username = ""
         LoginWindow.Password = ""
     end
+
+    LoginWindow.UpdateLanguage()
+    LoginWindow.RefreshPage()
 end
 
 function LoginWindow.ShowPage()
@@ -165,4 +168,12 @@ function LoginWindow.SavePassword()
     else
         Utils.SaveUserInfo(nil, nil)
     end
+end
+
+function LoginWindow.UpdateLanguage()
+    local button_login = LoginWindow.page:GetNodeByID("button_login")
+    button_login:SetValue(L"登录")
+
+    local button_register = LoginWindow.page:GetNodeByID("button_register")
+    button_register:SetValue(L"点击注册")
 end

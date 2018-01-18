@@ -32,13 +32,13 @@
     <div width="100%" height="84" style="margin-top:4px;padding:16px">
         <div>
             <div name="username_tips" style="float:left;color:#ffffff;font-size:18px;">
-                账号：
+                <%=L"账号："%>
             </div>
             <input name="username_input" width="110" height="28" style="float:left;color:#2a3038"/>
         </div>
         <div style="margin-top:10px;">
             <div name="username_tips" style="float:left;color:#ffffff;font-size:18px;">
-                密码：
+                <%=L"密码："%>
             </div>
             <input name="password_input" type="password" width="110" height="28" style="float:left;color:#2a3038"/>
         </div>
@@ -46,19 +46,19 @@
     <div style="margin-top:10px">
         <input name="checkbox_savepassword" type="checkbox" onclick="OnCheckSavePassword()" width="32" height="32" style="float:left;margin-left:20px" UncheckedBG="Texture/AppLauncherRes/newskin/checkbox_unselected_32bits.png" CheckedBG="Texture/AppLauncherRes/newskin/checkbox_selected_32bits.png"/>
         <div style="float:left;margin-top:5px;color:#ffffff">
-            记住密码
+            <%=L"记住密码"%>
         </div>
         <input name="checkbox_autologin" type="checkbox" onclick="OnCheckAutoLogin()" width="32" height="32" style="float:left;margin-left:20px" UncheckedBG="Texture/AppLauncherRes/newskin/checkbox_unselected_32bits.png" CheckedBG="Texture/AppLauncherRes/newskin/checkbox_selected_32bits.png"/>
         <div style="float:left;margin-top:5px;color:#ffffff">
-            自动登录
+            <%=L"自动登录"%>
         </div>
     </div>
-    <input type="button" value="登录" onclick="OnLogin()" align="center" style="float:left;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue_32bits.png#0 0 50 40:20 16 20 16)"/>
+    <input type="button" name="button_login" value="登录" onclick="OnLogin()" align="center" style="float:left;width:102px;height:38px;background:url(Texture/AppLauncherRes/newskin/btn_blue_32bits.png#0 0 50 40:20 16 20 16)"/>
     <div>
         <div style="float:left;margin-left:50px;margin-top:5px;color:#ffffff">
-            还没有账号？
+            <%=L"还没有账号？"%>
         </div>
-        <input type="button" value="点击注册" onclick="OnRegister()" style="color:#ff4e00"/>
+        <input type="button" name="button_register" value="点击注册" onclick="OnRegister()" style="color:#ff4e00"/>
     </div>
 </div>
 </pe:mcml>
