@@ -11,6 +11,9 @@ local TipsWindow = commonlib.gettable("AppLauncher.TipsWindow")
 
 function TipsWindow.OnInit()
     TipsWindow.page = document:GetPageCtrl()
+
+    TipsWindow.UpdateLanguage()
+    TipsWindow.RefreshPage()
 end
 
 function TipsWindow.ShowPage()
@@ -26,6 +29,12 @@ function TipsWindow.ShowPage()
     TipsWindow.ShowTips()
 end
 
+function TipsWindow.RefreshPage()
+    if TipsWindow.page then
+        TipsWindow.page:Refresh(0)
+    end
+end
+
 function TipsWindow.ShowTips()
     if TipsWindow.page then
         local node = MainWindow.GetSelectedNode()
@@ -35,7 +44,7 @@ function TipsWindow.ShowTips()
             local cur_version = a:getCurVersion()
             local latest_version = a:getLatestVersion()
 
-            local s = string.format("新版本v%s已经提供下载，你目前的版本是v%s，现在需要更新吗？", cur_version, latest_version)
+            local s = string.format(L"新版本v%s已经提供下载，你目前的版本是v%s，现在需要更新吗？", cur_version, latest_version)
             TipsWindow.page:SetValue("tips_txt", s)
         end
     end
@@ -55,4 +64,16 @@ function TipsWindow.OnUpdate()
 
     TipsWindow.window:CloseWindow(true)
     TipsWindow.window = nil
+end
+
+function TipsWindow.UpdateLanguage()
+    local button_skip = TipsWindow.page:GetNode("button_skip")
+    if button_skip then
+        button_skip:SetValue(L"跳过")
+    end
+
+    local buttom_update = TipsWindow.page:GetNode("buttom_update")
+    if buttom_update then
+        buttom_update:SetValue(L"更新")
+    end
 end

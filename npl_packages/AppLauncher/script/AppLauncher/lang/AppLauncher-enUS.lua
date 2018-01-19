@@ -32,8 +32,14 @@ L:RegisterTranslations("enUS", function() return {
     ["更新"] = "Update",
     ["账号："] = "Account: ",
     ["密码："] = "Password: ",
+    ["跳过"] = "Skip",
     ["记住密码"] = "Remember password",
     ["自动登录"] = "Autologin",
     ["还没有账号？"] = "No account?",
+    ["我的主页"] = "Homepage",
+    ["设置中心"] = "Setting",
+    ["退出登录"] = "Logout",
+    ["安装URL Protocol, 可用浏览器打开3D世界, 是否现在安装？(可能需要管理员权限)"] = "Do you want to install URL Protocol right now? It can let you open 3D world using browsers. (Maybe it needs the administrator authority.)",
+    ["新版本v%s已经提供下载，你目前的版本是v%s，现在需要更新吗？"] = "New version v%s can be downloaded now, and your current version is v%s. Do you want to update now?",
 }
 end)

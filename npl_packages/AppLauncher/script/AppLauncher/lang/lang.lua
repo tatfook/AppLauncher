@@ -17,7 +17,8 @@ end
 NPL.load("script/AppLauncher/main/Translation.lua")
 local Translation = commonlib.gettable("AppLauncher.Translation")
 
-ParaEngine.SetLocale(Translation.GetSystemLanguage())
+local lan = "enUS"--Translation.GetSystemLanguage()
+ParaEngine.SetLocale(lan)
 
 NPL.load("(gl)script/ide/Locale.lua");
 CommonCtrl.Locale.AutoLoadFile("script/AppLauncher/lang/AppLauncher-zhCN.lua");

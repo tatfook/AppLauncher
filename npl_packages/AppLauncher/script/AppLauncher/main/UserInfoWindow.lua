@@ -8,6 +8,15 @@ local UserInfoWindow = commonlib.gettable("AppLauncher.UserInfoWindow")
 
 function UserInfoWindow.OnInit()
     UserInfoWindow.page = document:GetPageCtrl()
+
+    UserInfoWindow.UpdateLanguage()
+    UserInfoWindow.RefreshPage()
+end
+
+function UserInfoWindow.RefreshPage()
+    if UserInfoWindow.page then
+        UserInfoWindow.page:Refresh(0)
+    end
 end
 
 function UserInfoWindow.ShowPage(username)
@@ -53,4 +62,21 @@ function UserInfoWindow.OnLogout()
         UserInfoWindow.Close()
         MainWindow.OnLogoutSuccess()
     end)
+end
+
+function UserInfoWindow.UpdateLanguage()
+    local button_home = UserInfoWindow.page:GetNode("button_home")
+    if button_home then
+        button_home:SetValue(L"我的主页")
+    end
+
+    local button_setting = UserInfoWindow.page:GetNode("button_setting")
+    if button_setting then
+        button_setting:SetValue(L"设置中心")
+    end
+
+    local button_logout = UserInfoWindow.page:GetNode("button_logout")
+    if button_logout then
+        button_logout:SetValue(L"退出登录")
+    end
 end
