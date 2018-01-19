@@ -177,3 +177,8 @@ function LoginWindow.UpdateLanguage()
     local button_register = LoginWindow.page:GetNodeByID("button_register")
     button_register:SetValue(L"点击注册")
 end
+
+function LoginWindow.OnRegister()
+    local url = "http://keepwork.com/wiki/join"
+    ParaGlobal.ShellExecute("open", "iexplore.exe", url, "", 1)
+end
