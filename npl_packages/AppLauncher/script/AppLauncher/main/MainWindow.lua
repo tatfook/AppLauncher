@@ -412,6 +412,8 @@ function MainWindow.DowloadLatestAppPage(appIndex, callback)
 end
 
 function MainWindow.OnLogin()
+    if MainWindow.IsUpdating then return end
+
     local LoginWindow = commonlib.gettable("AppLauncher.LoginWindow")
     LoginWindow.ShowPage()
     --[[
@@ -424,6 +426,8 @@ function MainWindow.OnLogin()
 end
 
 function MainWindow.OnRegister()
+    if MainWindow.IsUpdating then return end
+
     local url = "http://keepwork.com/wiki/join"
     ParaGlobal.ShellExecute("open", "iexplore.exe", url, "", 1)
 end
@@ -468,10 +472,14 @@ function MainWindow.CheckAutoLogin()
 end
 
 function MainWindow.OnUserInfo()
+    if MainWindow.IsUpdating then return end
+
     UserInfoWindow.ShowPage(MainWindow.Username)
 end
 
 function MainWindow.OnLanguage()
+    if MainWindow.IsUpdating then return end
+    
     local lan = Translation.GetCurrentLanguage()
     if lan == "enUS" then
         Translation.SetCurrentLanguage("zhCN")
