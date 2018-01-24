@@ -187,7 +187,7 @@ function Utils.AgreeOauth(username, clientID, token, callback)
 		    LOG.std(nil, "debug", "keepwork agreeOauth code", code);
 
             if type(callback) == "function" then
-                callback(true)
+                callback(true, username)
             end
 
             return

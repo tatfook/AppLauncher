@@ -460,9 +460,9 @@ function MainWindow.CheckAutoLogin()
         local password = Utils.GetPassword()
         LOG.std(nil, "debug", "AppLauncher", string.format("MainWindow.CheckAutoLogin(): username '%s', password '%s'", username, password))
         if #username > 0 and #password > 0 then
-            Utils.Login(username, password, function (isSuccess)
+            Utils.Login(username, password, function (isSuccess, showUserName)
                 if isSuccess then
-                    MainWindow.OnLoginSuccess(username)
+                    MainWindow.OnLoginSuccess(username, showUserName)
                 end
             end)
         end
@@ -479,7 +479,7 @@ end
 
 function MainWindow.OnLanguage()
     if MainWindow.IsUpdating then return end
-    
+
     local lan = Translation.GetCurrentLanguage()
     if lan == "enUS" then
         Translation.SetCurrentLanguage("zhCN")

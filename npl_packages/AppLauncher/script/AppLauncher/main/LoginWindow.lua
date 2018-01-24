@@ -76,13 +76,13 @@ function LoginWindow.OnLogin()
     local password = LoginWindow.GetPasswordFromInput()
     LOG.std(nil, "debug", "AppLauncher", "username: %s, password: %s", username, password)
 
-    Utils.Login(username, password, function (isSuccess)
+    Utils.Login(username, password, function (isSuccess, showUserName)
         if isSuccess then
             LoginWindow.Close()
 
             LoginWindow.SavePassword()
 
-            MainWindow.OnLoginSuccess(username)
+            MainWindow.OnLoginSuccess(showUserName)
         end
     end)
 end
