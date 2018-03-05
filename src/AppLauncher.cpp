@@ -102,9 +102,12 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR lpCmdLine, INT )
 		ADD_RESOURCE("npl_packages/LauncherScript.zip", AppLauncher_zip);
 		ADD_RESOURCE("npl_packages/AppLauncherTexture.zip", AppLauncherTexture_zip);
 		ADD_RESOURCE("npl_packages/Mod_AutoUpdater.zip", AutoUpdater_zip);
+		ADD_RESOURCE("npl_packages/TruckStar.zip", TruckStar_zip);
+
 		pParaEngineApp->LoadNPLPackage("npl_packages/LauncherScript/");
 		pParaEngineApp->LoadNPLPackage("npl_packages/AppLauncherTexture/");
 		pParaEngineApp->LoadNPLPackage("npl_packages/Mod_AutoUpdater/");
+		pParaEngineApp->LoadNPLPackage("npl_packages/TruckStar/");
 #ifdef NDEBUG
 		ADD_RESOURCE("cmakes/main/Mod_main.zip", main_zip);
 		pParaEngineApp->LoadNPLPackage("cmakes/main/Mod_main/");

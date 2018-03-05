@@ -35,7 +35,7 @@ MainWindow.cmdlines = {
     ["paracraft-haqi"] = [[single="true" noupdate="true" version="kids" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
     ["haqi"] = [[single="true" version="kids" noupdate="true" updateurl="http://update.61.com/haqi/coreupdate/;http://tmlog.paraengine.com/;http://tmver.pala5.cn;"]],
     ["haqi2"] = [[single="true" version="teen" noupdate="true" updateurl="http://update.61.com/haqi/coreupdate_teen/;http://teenver.paraengine.com/;http://teenver.pala5.cn/;"]],
-    ["truckstar"] = [[]],
+    ["truckstar"] = [[noupdate="true" debug="main" mc="true" bootstrapper="script/apps/Aries/main_loop.lua" mod="Seer" isDevEnv="true"]],
 }
 MainWindow.menus = {
     {
@@ -93,7 +93,7 @@ MainWindow.menus = {
     {
         id = "truckstar",
         folder = "truckstar",
-        executable="Launcher",
+        executable="Container/AwesomeTruck",
         label = "创意空间童趣版",
         icon = "Texture/AppLauncherRes/truckstar_logo_32bits.png#0 0 36 36",
         window_bg = "truckstar/truckstar_window_bg_32bit.png",
@@ -209,10 +209,75 @@ function MainWindow.OpenApp(id)
     end
 end
 
+local function createTruckStarAssetsManager()
+	luaopen_pb();
+	NPL.load("script/Launcher/Headers.lua");
+	local Launcher = NPL.load("script/Launcher/Launcher.lua");
+	Launcher.init("120.132.120.164", 18000, "truckstar/");
+	local versionfilepath = "truckstar/version";
+			
+	local a = 
+	{
+		currentVer = {0,0,0,0},
+		lastestVer = {},
+		hasVersionFile = function (self)
+			return ParaIO.DoesFileExist(versionfilepath)
+		end,
+		isNeedUpdate = function (self)
+			self:getCurVersion();
+			for i = 1, 4 do 
+				if self.currentVer[i] ~= self.lastestVer[i] then 
+					return true;
+				end
+			end
+			return false;
+		end,
+		download = function (self)
+			MainWindow.ShowState(L"正在更新")
+			Launcher.update(self.currentVer, self.lastestVer, function (err)
+				if err then 
+					MainWindow.ShowState(err);
+				else
+                    MainWindow.ShowPercent(100);
+					MainWindow.ShowState(L"已经是最新版本")
+					self.cur_version = {self.lastestVer[1], self.lastestVer[2], self.lastestVer[3], self.lastestVer[4]}
+					commonlib.SaveTableToFile(self.lastestVer, versionfilepath);
+				end
+
+				MainWindow.IsUpdating = false;
+			end, function (count, sum)
+				MainWindow.ShowPercent(math.floor(count * 100 / sum));
+			end)
+		end,
+		check = function (self, _, callback)
+			MainWindow.ShowState(L"检测版本号")
+			Launcher.checkVersion(function (ver)
+				self.lastestVer = ver;
+				callback();
+			end)
+		end,
+		getCurVersion = function (self) 
+				self.currentVer = commonlib.LoadTableFromFile(versionfilepath) or {0,0,0,0};
+				return string.format("%s.%s.%s.%s",self.currentVer[1],self.currentVer[2],self.currentVer[3],self.currentVer[4]) 
+			end,
+		getLatestVersion = function (self) 
+				return string.format("%s.%s.%s.%s",self.lastestVer[1],self.lastestVer[2],self.lastestVer[3],self.lastestVer[4]) 
+			end,
+	};
+	return a;
+end
+
 function MainWindow.CreateOrGetAssetsManager(id,redist_root,config_file)
     if(not id)then return end
+
     local a = MainWindow.asset_managers[id];
     if(not a)then
+		if id == "truckstar" then 
+			a = createTruckStarAssetsManager();
+			MainWindow.asset_managers[id] = a;
+			return a;
+		end
+
         a = AssetsManager:new();
         local timer;
         if(redist_root and config_file)then
